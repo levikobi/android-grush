@@ -88,7 +88,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         return mProductList.size();
     }
 
-    class ProductViewHolder extends RecyclerView.ViewHolder {
+    class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final TextView productItemText;
         public final ImageView productItemImage;
         final ProductListAdapter mAdapter;
@@ -98,6 +98,25 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             productItemText = itemView.findViewById(R.id.productlist_item_text);
             productItemImage = itemView.findViewById(R.id.productlist_item_image);
             this.mAdapter = adapter;
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            // Get the position of the item that was clicked.
+            int mPosition = getLayoutPosition();
+            // Use that to access the affected item in mWordList.
+            String element = mProductList.get(mPosition);
+            // Change the word in the mWordList.
+            mProductList.set(mPosition, "Clicked! " + element);
+            // Notify the adapter, that the data has changed so it can
+            // update the RecyclerView to display the data.
+            mAdapter.notifyDataSetChanged();
         }
     }
 }
