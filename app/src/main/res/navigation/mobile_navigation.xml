@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_home_to_productDetails"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_home_to_productCreate"
+            app:destination="@id/productCreateFragment" />
     </fragment>
 
     <fragment
@@ -40,4 +43,9 @@
             android:name="product_id"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/productCreateFragment"
+        android:name="com.comas.grush.ui.product.ProductCreateFragment"
+        android:label="fragment_product_create"
+        tools:layout="@layout/fragment_product_create" />
 </navigation>
