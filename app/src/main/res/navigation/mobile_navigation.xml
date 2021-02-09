@@ -41,7 +41,7 @@
         tools:layout="@layout/fragment_product_details" >
         <argument
             android:name="product_id"
-            app:argType="string" />
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/productCreateFragment"

@@ -1,4 +1,4 @@
-package com.comas.grush.adapters;
+package com.comas.grush.ui.product;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -111,11 +111,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
          */
         @Override
         public void onClick(View v) {
-            // Get the position of the item that was clicked.
-            int mPosition = getLayoutPosition();
-
+            int productId = mProductList.get(getLayoutPosition()).getId();
             Navigation.findNavController(v)
-                    .navigate(HomeFragmentDirections.actionHomeToProductDetails(String.valueOf(mPosition)));
+                    .navigate(HomeFragmentDirections.actionHomeToProductDetails(productId));
         }
     }
 }

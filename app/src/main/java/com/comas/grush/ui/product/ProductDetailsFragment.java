@@ -60,10 +60,15 @@ public class ProductDetailsFragment extends ProductFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         setContainerVisibility();
 
-        String productId = ProductDetailsFragmentArgs.fromBundle(getArguments()).getProductId();
-        mProduct = Model.instance.getProductById(productId);
-
-        setContainerData();
+        Integer productId = ProductDetailsFragmentArgs.fromBundle(getArguments()).getProductId();
+//        mProduct = Model.instance.getProductById(productId);
+        Model.instance.getProductById(productId, new Model.GetProductByIdListener() {
+            @Override
+            public void onComplete(Product product) {
+                mProduct = product;
+                setContainerData();
+            }
+        });
         return view;
     }
 

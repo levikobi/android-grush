@@ -1,23 +1,22 @@
 package com.comas.grush.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Product {
-    private String id;
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String name;
     private String desc;
     private String image;
 
-    public Product(String id, String name, String desc, String image) {
-        this.id = id;
-        this.name = name;
-        this.desc = desc;
-        this.image = image;
-    }
-
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

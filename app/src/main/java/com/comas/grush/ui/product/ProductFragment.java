@@ -68,10 +68,10 @@ public class ProductFragment extends Fragment {
     }
 
     private void handleSave(View view) {
-        Model.instance.addProduct(new Product("2",
-                mProductNameEditText.getText().toString(),
-                mProductDescEditText.getText().toString(),
-                null));
+        Product product = new Product();
+        product.setName(mProductNameEditText.getText().toString());
+        product.setDesc(mProductDescEditText.getText().toString());
+        Model.instance.addProduct(product, () -> { });
         Navigation.findNavController(view).popBackStack();
     }
 }
