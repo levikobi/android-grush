@@ -1,4 +1,4 @@
-package com.comas.grush;
+package com.comas.grush.ui.product;
 
 import androidx.lifecycle.ViewModel;
 

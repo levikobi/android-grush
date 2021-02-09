@@ -28,12 +28,12 @@
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/productFragment"
-        android:name="com.comas.grush.ProductFragment"
+        android:name="com.comas.grush.ui.product.ProductFragment"
         android:label="product_fragment"
         tools:layout="@layout/product_fragment" />
     <fragment
         android:id="@+id/productDetailsFragment"
-        android:name="com.comas.grush.ProductDetailsFragment"
+        android:name="com.comas.grush.ui.product.ProductDetailsFragment"
         android:label="fragment_product_details"
         tools:layout="@layout/fragment_product_details" >
         <argument

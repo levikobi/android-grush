@@ -1,4 +1,4 @@
-package com.comas.grush;
+package com.comas.grush.ui.product;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.comas.grush.R;
 
 public class ProductFragment extends Fragment {
 

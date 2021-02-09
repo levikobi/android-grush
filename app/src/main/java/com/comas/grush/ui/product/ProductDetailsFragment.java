@@ -1,10 +1,12 @@
-package com.comas.grush;
+package com.comas.grush.ui.product;
 
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.comas.grush.ui.product.ProductDetailsFragmentArgs;
 
 public class ProductDetailsFragment extends ProductFragment {
 
