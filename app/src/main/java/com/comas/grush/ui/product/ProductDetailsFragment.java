@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.comas.grush.ui.product.ProductDetailsFragmentArgs;
-
 import org.jetbrains.annotations.NotNull;
 
 public class ProductDetailsFragment extends ProductFragment {

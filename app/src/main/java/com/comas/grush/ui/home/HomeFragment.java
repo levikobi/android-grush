@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.comas.grush.R;
 import com.comas.grush.adapters.ProductListAdapter;
+import com.comas.grush.model.Model;
+import com.comas.grush.model.Product;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.LinkedList;
@@ -27,7 +29,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ProductListAdapter mAdapter;
 
-    private final List<String> mProductList = new LinkedList<>();
+    private List<Product> mProductList;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -39,9 +41,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        for (int i = 0; i < 20; i++) {
-            mProductList.add("Word " + i);
-        }
+        mProductList = Model.instance.getAllProducts();
 
         // Get a handle to the RecyclerView.
         mRecyclerView = root.findViewById(R.id.recyclerview);

@@ -13,16 +13,17 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.comas.grush.R;
+import com.comas.grush.model.Product;
 import com.comas.grush.ui.home.HomeFragmentDirections;
 
 import java.util.List;
 
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ProductViewHolder> {
 
-    private final List<String> mProductList;
+    private final List<Product> mProductList;
     private final LayoutInflater mInflater;
 
-    public ProductListAdapter(Context context, List<String> productList) {
+    public ProductListAdapter(Context context, List<Product> productList) {
         mInflater = LayoutInflater.from(context);
         this.mProductList = productList;
     }
@@ -76,8 +77,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
      */
     @Override
     public void onBindViewHolder(@NonNull ProductListAdapter.ProductViewHolder holder, int position) {
-        String mCurrent = mProductList.get(position);
-        holder.productItemText.setText(mCurrent);
+        Product mCurrent = mProductList.get(position);
+        holder.productItemText.setText(mCurrent.getName());
     }
 
     /**
@@ -112,13 +113,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         public void onClick(View v) {
             // Get the position of the item that was clicked.
             int mPosition = getLayoutPosition();
-            // Use that to access the affected item in mWordList.
-            String element = mProductList.get(mPosition);
-            // Change the word in the mWordList.
-            mProductList.set(mPosition, "Clicked! " + element);
-            // Notify the adapter, that the data has changed so it can
-            // update the RecyclerView to display the data.
-            mAdapter.notifyDataSetChanged();
 
             Navigation.findNavController(v)
                     .navigate(HomeFragmentDirections.actionHomeToProductDetails(String.valueOf(mPosition)));
