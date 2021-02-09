@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "96330300759",
+    "project_id": "grush-project",
+    "storage_bucket": "grush-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96330300759:android:5fe1c2f1c00aaf84b81212",
+        "android_client_info": {
+          "package_name": "com.comas.grush"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "96330300759-3seub0fqlmbdr7rdvk8alcb2mce3th20.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC293c9HNVa4NXTar-DD7S-vkkaTt3gibw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "96330300759-3seub0fqlmbdr7rdvk8alcb2mce3th20.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
