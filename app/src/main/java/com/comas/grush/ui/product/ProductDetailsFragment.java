@@ -6,9 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.comas.grush.model.Model;
+import com.comas.grush.model.Product;
+
 import org.jetbrains.annotations.NotNull;
 
 public class ProductDetailsFragment extends ProductFragment {
+
+    private Product mProduct;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,12 +58,30 @@ public class ProductDetailsFragment extends ProductFragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        setContainerVisibility();
+
+        String productId = ProductDetailsFragmentArgs.fromBundle(getArguments()).getProductId();
+        mProduct = Model.instance.getProductById(productId);
+
+        setContainerData();
+        return view;
+    }
+
+    public void setContainerVisibility() {
         mEditImageButton.setVisibility(View.GONE);
         mDeleteButton.setVisibility(View.GONE);
         mEditButton.setVisibility(View.GONE);
         mSaveButton.setVisibility(View.GONE);
-        String productId = ProductDetailsFragmentArgs.fromBundle(getArguments()).getProductId();
-        mProductNameEditText.setText(productId);
-        return view;
+        mProductNameEditText.setKeyListener(null);
+        mProductNameEditText.setBackgroundResource(android.R.color.transparent);
+        mProductDescEditText.setKeyListener(null);
+        mProductDescEditText.setBackgroundResource(android.R.color.transparent);
+
     }
+
+    private void setContainerData() {
+        mProductNameEditText.setText(mProduct.getName());
+        mProductDescEditText.setText(mProduct.getDesc());
+    }
+
 }

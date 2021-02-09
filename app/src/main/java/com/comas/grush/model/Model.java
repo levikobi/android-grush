@@ -18,4 +18,12 @@ public class Model {
     public List<Product> getAllProducts() {
         return products;
     }
+
+    public Product getProductById(String id) {
+        return products.get(Integer.parseInt(id));
+    }
+
+    public void addProduct(Product product) {
+        products.add(product);
+    }
 }

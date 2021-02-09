@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.comas.grush.R;
+import com.comas.grush.model.Model;
+import com.comas.grush.model.Product;
 
 public class ProductFragment extends Fragment {
 
@@ -38,11 +41,12 @@ public class ProductFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.product_fragment, container, false);
-        initializeViewVariables(view);
+        initializeViewElements(view);
+        initializeViewHandlers();
         return view;
     }
 
-    private void initializeViewVariables(View view) {
+    private void initializeViewElements(View view) {
         mProductImageView = view.findViewById(R.id.product_frag_image);
         mEditImageButton = view.findViewById(R.id.product_frag_edit_image);
         mProductNameEditText = view.findViewById(R.id.product_frag_name_text);
@@ -52,6 +56,10 @@ public class ProductFragment extends Fragment {
         mDeleteButton = view.findViewById(R.id.product_frag_delete_button);
     }
 
+    private void initializeViewHandlers() {
+        mSaveButton.setOnClickListener(this::handleSave);
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -59,4 +67,11 @@ public class ProductFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+    private void handleSave(View view) {
+        Model.instance.addProduct(new Product("2",
+                mProductNameEditText.getText().toString(),
+                mProductDescEditText.getText().toString(),
+                null));
+        Navigation.findNavController(view).popBackStack();
+    }
 }
