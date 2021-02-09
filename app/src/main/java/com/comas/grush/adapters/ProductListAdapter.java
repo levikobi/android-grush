@@ -121,7 +121,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             mAdapter.notifyDataSetChanged();
 
             Navigation.findNavController(v)
-                    .navigate(HomeFragmentDirections.actionHomeToProduct(String.valueOf(mPosition)));
+                    .navigate(HomeFragmentDirections.actionHomeToProductDetails(String.valueOf(mPosition)));
         }
     }
 }

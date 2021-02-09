@@ -23,13 +23,13 @@ public class ProductFragment extends Fragment {
 
     private ProductViewModel mViewModel;
 
-    private ImageView mProductImageView;
-    private ImageButton mEditImageButton;
-    private EditText mProductNameEditText;
-    private EditText mProductDescEditText;
-    private Button mSaveButton;
-    private Button mEditButton;
-    private Button mDeleteButton;
+    protected ImageView mProductImageView;
+    protected ImageButton mEditImageButton;
+    protected EditText mProductNameEditText;
+    protected EditText mProductDescEditText;
+    protected Button mSaveButton;
+    protected Button mEditButton;
+    protected Button mDeleteButton;
 
     public static ProductFragment newInstance() {
         return new ProductFragment();
@@ -40,8 +40,6 @@ public class ProductFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.product_fragment, container, false);
         initializeViewVariables(view);
-        String productId = ProductFragmentArgs.fromBundle(getArguments()).getProductId();
-        mProductNameEditText.setText(productId);
         return view;
     }
 
