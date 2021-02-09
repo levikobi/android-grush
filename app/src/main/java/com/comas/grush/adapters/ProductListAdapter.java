@@ -9,9 +9,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.comas.grush.R;
+import com.comas.grush.ui.home.HomeFragmentDirections;
 
 import java.util.List;
 
@@ -117,6 +119,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             // Notify the adapter, that the data has changed so it can
             // update the RecyclerView to display the data.
             mAdapter.notifyDataSetChanged();
+
+            Navigation.findNavController(v)
+                    .navigate(HomeFragmentDirections.actionHomeToProduct(String.valueOf(mPosition)));
         }
     }
 }

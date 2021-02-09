@@ -9,7 +9,11 @@
         android:id="@+id/nav_home"
         android:name="com.comas.grush.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_to_product"
+            app:destination="@id/productFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_gallery"
@@ -22,4 +26,13 @@
         android:name="com.comas.grush.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/productFragment"
+        android:name="com.comas.grush.ProductFragment"
+        android:label="product_fragment"
+        tools:layout="@layout/product_fragment" >
+        <argument
+            android:name="product_id"
+            app:argType="string" />
+    </fragment>
 </navigation>
