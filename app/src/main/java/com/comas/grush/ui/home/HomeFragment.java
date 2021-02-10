@@ -41,36 +41,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
-//        mProductList = Model.instance.getAllProducts();
-        Model.instance.getAllProducts(new Model.GetAllProductsListener() {
-            @Override
-            public void onComplete(List<Product> products) {
-                mProductList = products;
+        Model.instance.getAllProducts(products -> {
+            mProductList = products;
+            mRecyclerView = root.findViewById(R.id.recyclerview);
+            // Create an adapter and supply the data to be displayed.
+            mAdapter = new ProductListAdapter(root.getContext(), mProductList);
+            // Connect the adapter with the RecyclerView.
+            mRecyclerView.setAdapter(mAdapter);
+            // Give the RecyclerView a default layout manager.
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
-                // Get a handle to the RecyclerView.
-                mRecyclerView = root.findViewById(R.id.recyclerview);
-                // Create an adapter and supply the data to be displayed.
-                mAdapter = new ProductListAdapter(root.getContext(), mProductList);
-                // Connect the adapter with the RecyclerView.
-                mRecyclerView.setAdapter(mAdapter);
-                // Give the RecyclerView a default layout manager.
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-
-                FloatingActionButton fab = root.findViewById(R.id.add_fab);
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Navigation.findNavController(view).navigate(HomeFragmentDirections.actionHomeToProductCreate());
-                    }
-                });
-
-                for (Product product : mProductList) {
-                    Log.d("TAG", String.valueOf(product.getId()));
-                }
-            }
+            FloatingActionButton fab = root.findViewById(R.id.add_fab);
+            fab.setOnClickListener(view -> Navigation.findNavController(view)
+                    .navigate(HomeFragmentDirections.actionHomeToProductCreate()));
         });
-
-
 
         return root;
     }

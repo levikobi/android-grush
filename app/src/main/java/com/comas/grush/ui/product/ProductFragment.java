@@ -98,6 +98,7 @@ public class ProductFragment extends Fragment {
                 mProductImageView.setImageBitmap(imageBitmap);
                 break;
             case REQUEST_EXTERNAL_CONTENT:
+                // TODO: fix uploading from gallery
                 Uri selectedImage = data.getData();
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
                 if (selectedImage == null) break;
