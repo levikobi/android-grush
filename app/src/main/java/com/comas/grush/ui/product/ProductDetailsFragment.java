@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.comas.grush.model.Model;
 import com.comas.grush.model.Product;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -87,6 +88,9 @@ public class ProductDetailsFragment extends ProductFragment {
     private void setContainerData() {
         mProductNameEditText.setText(mProduct.getName());
         mProductDescEditText.setText(mProduct.getDesc());
+        if (mProduct.getImage() != null) {
+            Picasso.get().load(mProduct.getImage()).into(mProductImageView);
+        }
     }
 
 }
