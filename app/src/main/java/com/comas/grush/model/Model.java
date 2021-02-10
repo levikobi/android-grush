@@ -1,5 +1,7 @@
 package com.comas.grush.model;
 
+import android.graphics.Bitmap;
+
 import java.util.List;
 
 public class Model {
@@ -30,5 +32,12 @@ public class Model {
     }
     public void addProduct(Product product, AddProductListener listener) {
         modelFirebase.addProduct(product, listener);
+    }
+
+    public interface UploadImageListener {
+        void onComplete(String url);
+    }
+    public void uploadImage(Bitmap imageBmp, String name, UploadImageListener listener) {
+        modelFirebase.uploadImage(imageBmp, name, listener);
     }
 }

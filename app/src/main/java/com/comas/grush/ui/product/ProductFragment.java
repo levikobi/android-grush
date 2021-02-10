@@ -2,6 +2,10 @@ package com.comas.grush.ui.product;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +26,14 @@ import com.comas.grush.R;
 import com.comas.grush.model.Model;
 import com.comas.grush.model.Product;
 
+import java.util.Objects;
+import java.util.UUID;
+
+import static android.app.Activity.RESULT_OK;
+
 public class ProductFragment extends Fragment {
+
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private ProductViewModel mViewModel;
 
@@ -57,6 +69,7 @@ public class ProductFragment extends Fragment {
     }
 
     private void initializeViewHandlers() {
+        mEditImageButton.setOnClickListener(this::handleEditImage);
         mSaveButton.setOnClickListener(this::handleSave);
     }
 
@@ -67,11 +80,40 @@ public class ProductFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) return;
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mProductImageView.setImageBitmap(imageBitmap);
+        }
+    }
+
+    @SuppressLint("QueryPermissionsNeeded")
+    private void handleEditImage(View view) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
     private void handleSave(View view) {
         Product product = new Product();
         product.setName(mProductNameEditText.getText().toString());
         product.setDesc(mProductDescEditText.getText().toString());
-        Model.instance.addProduct(product, () -> { });
-        Navigation.findNavController(view).popBackStack();
+
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) mProductImageView.getDrawable();
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+        Model.instance.uploadImage(bitmap, UUID.randomUUID().toString(), url -> {
+            if (url == null) {
+
+            } else {
+                product.setImage(url);
+                Model.instance.addProduct(product, () -> {
+                    Navigation.findNavController(view).popBackStack();
+                });
+            }
+        });
     }
 }
