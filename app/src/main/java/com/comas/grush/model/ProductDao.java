@@ -14,8 +14,8 @@ public interface ProductDao {
     @Query("select * from Product")
     List<Product> getAll();
 
-    @Query("select * from Product where id == :id limit 1")
-    Product getById(Integer id);
+    @Query("select * from Product where id like :id limit 1")
+    Product getById(String id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Product... products);

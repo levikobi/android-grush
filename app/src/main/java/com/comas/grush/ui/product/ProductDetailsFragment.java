@@ -60,7 +60,7 @@ public class ProductDetailsFragment extends ProductFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         setContainerVisibility();
 
-        Integer productId = ProductDetailsFragmentArgs.fromBundle(getArguments()).getProductId();
+        String productId = ProductDetailsFragmentArgs.fromBundle(getArguments()).getProductId();
 //        mProduct = Model.instance.getProductById(productId);
         Model.instance.getProductById(productId, new Model.GetProductByIdListener() {
             @Override

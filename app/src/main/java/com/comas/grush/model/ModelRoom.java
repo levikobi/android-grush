@@ -30,7 +30,7 @@ public class ModelRoom {
     public interface GetProductByIdListener {
         void onComplete(Product product);
     }
-    public void getProductById(Integer id, GetProductByIdListener listener) {
+    public void getProductById(String id, GetProductByIdListener listener) {
         class MyAsyncTask extends AsyncTask {
             private Product product;
             @Override

@@ -88,7 +88,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
      */
     @Override
     public int getItemCount() {
-        return mProductList.size();
+        return mProductList != null ? mProductList.size() : 0;
     }
 
     class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -111,7 +111,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
          */
         @Override
         public void onClick(View v) {
-            int productId = mProductList.get(getLayoutPosition()).getId();
+            String productId = mProductList.get(getLayoutPosition()).getId();
             Navigation.findNavController(v)
                     .navigate(HomeFragmentDirections.actionHomeToProductDetails(productId));
         }

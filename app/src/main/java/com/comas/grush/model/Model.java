@@ -21,8 +21,8 @@ public class Model {
     public interface GetProductByIdListener {
         void onComplete(Product product);
     }
-    public void getProductById(Integer id, GetProductByIdListener listener) {
-
+    public void getProductById(String id, GetProductByIdListener listener) {
+        modelFirebase.getProductById(id, listener);
     }
 
     public interface AddProductListener {
