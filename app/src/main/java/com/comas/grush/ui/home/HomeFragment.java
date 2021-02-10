@@ -47,10 +47,6 @@ public class HomeFragment extends Fragment {
             public void onComplete(List<Product> products) {
                 mProductList = products;
 
-
-
-
-
                 // Get a handle to the RecyclerView.
                 mRecyclerView = root.findViewById(R.id.recyclerview);
                 // Create an adapter and supply the data to be displayed.
