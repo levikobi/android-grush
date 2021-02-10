@@ -82,7 +82,6 @@ public class ProductDetailsFragment extends ProductFragment {
         mProductNameEditText.setBackgroundResource(android.R.color.transparent);
         mProductDescEditText.setKeyListener(null);
         mProductDescEditText.setBackgroundResource(android.R.color.transparent);
-
     }
 
     private void setContainerData() {
@@ -92,5 +91,4 @@ public class ProductDetailsFragment extends ProductFragment {
             Picasso.get().load(mProduct.getImage()).into(mProductImageView);
         }
     }
-
 }
