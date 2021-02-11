@@ -10,24 +10,28 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.comas.grush.R;
 import com.comas.grush.model.Product;
 import com.comas.grush.ui.home.HomeFragmentDirections;
+import com.comas.grush.ui.home.HomeViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ProductViewHolder> {
 
-    private final List<Product> mProductList;
+    private HomeViewModel mViewModel;
+
     private final LayoutInflater mInflater;
 
-    public ProductListAdapter(Context context, List<Product> productList) {
+    public ProductListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
-        this.mProductList = productList;
+        mViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(HomeViewModel.class);
     }
 
     @NonNull
@@ -39,7 +43,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ProductListAdapter.ProductViewHolder holder, int position) {
-        Product mCurrent = mProductList.get(position);
+        Product mCurrent = mViewModel.getProductList().get(position);
         if (mCurrent.getImage() != null) {
             Picasso.get().load(mCurrent.getImage()).placeholder(R.drawable.ic_menu_gallery).into(holder.productItemImage);
         }
@@ -48,7 +52,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public int getItemCount() {
-        return mProductList != null ? mProductList.size() : 0;
+        List<Product> products = mViewModel.getProductList();
+        return products != null ? products.size() : 0;
     }
 
     class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -66,7 +71,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
         @Override
         public void onClick(View v) {
-            String productId = mProductList.get(getLayoutPosition()).getId();
+            String productId = mViewModel.getProductList().get(getLayoutPosition()).getId();
             Navigation.findNavController(v)
                     .navigate(HomeFragmentDirections.actionHomeToProductDetails(productId));
         }
