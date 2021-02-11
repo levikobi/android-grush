@@ -8,12 +8,16 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
 
 public class ModelFirebase {
 
@@ -23,8 +27,12 @@ public class ModelFirebase {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(COLLECTION_PATH).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    Log.d("TAG", "Get all products SUCCESS");
-                    List<Product> products = queryDocumentSnapshots.toObjects(Product.class);
+                    List<Product> products = new LinkedList<>();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        Product product = new Product();
+                        product.fromMap(doc.getData());
+                        products.add(product);
+                    }
                     listener.onComplete(products);
                 });
     }
@@ -34,7 +42,8 @@ public class ModelFirebase {
         db.collection(COLLECTION_PATH).document(id).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     Log.d("TAG", "Get a product SUCCESS");
-                    Product product = documentSnapshot.toObject(Product.class);
+                    Product product = new Product();
+                    product.fromMap(Objects.requireNonNull(documentSnapshot.getData()));
                     listener.onComplete(product);
                 });
     }
@@ -43,7 +52,7 @@ public class ModelFirebase {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference newProductRef = db.collection(COLLECTION_PATH).document();
         product.setId(newProductRef.getId());
-        newProductRef.set(product)
+        newProductRef.set(product.toMap())
                 .addOnSuccessListener(aVoid -> {
                     Log.d("TAG", "Add a product SUCCESS");
                     listener.onComplete();
