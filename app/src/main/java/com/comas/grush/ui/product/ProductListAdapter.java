@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ProductViewHolder> {
 
-    private HomeViewModel mViewModel;
+    private final HomeViewModel mViewModel;
 
     private final LayoutInflater mInflater;
 
@@ -43,7 +43,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ProductListAdapter.ProductViewHolder holder, int position) {
-        Product mCurrent = mViewModel.getProductList().get(position);
+        Product mCurrent = mViewModel.getProductList().getValue().get(position);
         if (mCurrent.getImage() != null) {
             Picasso.get().load(mCurrent.getImage()).placeholder(R.drawable.ic_menu_gallery).into(holder.productItemImage);
         }
@@ -52,7 +52,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public int getItemCount() {
-        List<Product> products = mViewModel.getProductList();
+        if (mViewModel.getProductList() == null) return 0;
+        List<Product> products = mViewModel.getProductList().getValue();
         return products != null ? products.size() : 0;
     }
 
@@ -71,7 +72,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
         @Override
         public void onClick(View v) {
-            String productId = mViewModel.getProductList().get(getLayoutPosition()).getId();
+            String productId = mViewModel.getProductList().getValue().get(getLayoutPosition()).getId();
             Navigation.findNavController(v)
                     .navigate(HomeFragmentDirections.actionHomeToProductDetails(productId));
         }

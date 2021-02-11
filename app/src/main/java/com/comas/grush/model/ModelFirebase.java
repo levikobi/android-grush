@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,14 +31,32 @@ public class ModelFirebase {
         db.collection(COLLECTION_PATH).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Product> products = new LinkedList<>();
+                    Log.d("TAG", "***Getting products from Firebase***");
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         Product product = new Product();
                         product.fromMap(doc.getData());
                         products.add(product);
+                        Log.d("TAG", product.getName());
                     }
-                    listener.onComplete(products);
+                    listener.onComplete(new MutableLiveData<>(products));
                 });
     }
+
+//    public void getAllProducts(Model.GetAllProductsListener listener) {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection(COLLECTION_PATH).get()
+//                .addOnSuccessListener(queryDocumentSnapshots -> {
+//                    List<Product> products = new LinkedList<>();
+//                    Log.d("TAG", "***Getting products from Firebase***");
+//                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+//                        Product product = new Product();
+//                        product.fromMap(doc.getData());
+//                        products.add(product);
+//                        Log.d("TAG", product.getName());
+//                    }
+//                    listener.onComplete(products);
+//                });
+//    }
 
     public void getProductById(String id, Model.GetProductByIdListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();

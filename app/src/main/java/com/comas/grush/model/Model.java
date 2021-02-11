@@ -2,6 +2,8 @@ package com.comas.grush.model;
 
 import android.graphics.Bitmap;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
 
 public class Model {
@@ -14,7 +16,7 @@ public class Model {
     private Model() { }
 
     public interface GetAllProductsListener {
-        void onComplete(List<Product> products);
+        void onComplete(LiveData<List<Product>> products);
     }
     public void getAllProducts(GetAllProductsListener listener) {
         modelFirebase.getAllProducts(listener);

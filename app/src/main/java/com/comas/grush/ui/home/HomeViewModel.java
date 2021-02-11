@@ -12,7 +12,7 @@ import java.util.List;
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
-    private List<Product> mProductList;
+    private LiveData<List<Product>> mProductList;
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
@@ -25,7 +25,7 @@ public class HomeViewModel extends ViewModel {
         return mText;
     }
 
-    public List<Product> getProductList() {
+    public LiveData<List<Product>> getProductList() {
         return mProductList;
     }
 
