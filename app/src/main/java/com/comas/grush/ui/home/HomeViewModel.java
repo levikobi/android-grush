@@ -8,7 +8,6 @@ import com.comas.grush.model.Model;
 import com.comas.grush.model.Product;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class HomeViewModel extends ViewModel {
 

@@ -31,11 +31,10 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         mViewModel = new ViewModelProvider((ViewModelStoreOwner) root.getContext()).get(HomeViewModel.class);
-
-        mSwipeRefreshLayout = root.findViewById(R.id.swipe_refresh);
-        mRecyclerView = root.findViewById(R.id.recyclerview);
-        mAddProductFab = root.findViewById(R.id.add_fab);
-
+        initializeViewElements(root);
+        initializeRecyclerView(root);
+        initializeViewHandlers();
+        refreshProductList();
 
 //        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
 //            @Override
@@ -44,24 +43,29 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
 
-        mAdapter = new ProductListAdapter(root.getContext());
+        return root;
+    }
+
+    private void initializeViewElements(View view) {
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
+        mRecyclerView = view.findViewById(R.id.recyclerview);
+        mAddProductFab = view.findViewById(R.id.add_fab);
+    }
+
+    private void initializeRecyclerView(View view) {
+        mAdapter = new ProductListAdapter(view.getContext());
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+    }
 
-        mViewModel.refreshProductList(() -> mAdapter.notifyDataSetChanged());
-
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mViewModel.refreshProductList(() -> mAdapter.notifyDataSetChanged());
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
-
+    private void initializeViewHandlers() {
+        mSwipeRefreshLayout.setOnRefreshListener(this::refreshProductList);
         mAddProductFab.setOnClickListener(view -> Navigation.findNavController(view)
                 .navigate(HomeFragmentDirections.actionHomeToProductCreate()));
+    }
 
-        return root;
+    private void refreshProductList() {
+        mViewModel.refreshProductList(() -> mAdapter.notifyDataSetChanged());
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }
