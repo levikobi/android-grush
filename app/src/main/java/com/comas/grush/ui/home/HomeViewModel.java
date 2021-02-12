@@ -11,28 +11,17 @@ import java.util.List;
 
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
     private LiveData<List<Product>> mProductList;
 
     public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
-
-        Model.instance.getAllProducts(products -> mProductList = products);
-    }
-
-    public LiveData<String> getText() {
-        return mText;
+        mProductList = Model.instance.getAllProducts();
     }
 
     public LiveData<List<Product>> getProductList() {
         return mProductList;
     }
 
-    public void refreshProductList(Runnable runnable) {
-        Model.instance.getAllProducts(products -> {
-            mProductList = products;
-            runnable.run();
-        });
+    public void refreshProductList() {
+        mProductList = Model.instance.getAllProducts();
     }
 }

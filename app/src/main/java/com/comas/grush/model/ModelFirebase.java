@@ -2,8 +2,10 @@ package com.comas.grush.model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -21,12 +23,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.function.Consumer;
 
 public class ModelFirebase {
 
     private static final String COLLECTION_PATH = "products";
 
-    public void getAllProducts(Model.GetAllProductsListener listener) {
+    public interface GetAllProductsListener {
+        void onComplete(List<Product> products);
+    }
+
+    public void getAllProducts(GetAllProductsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(COLLECTION_PATH).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -38,9 +45,10 @@ public class ModelFirebase {
                         products.add(product);
                         Log.d("TAG", product.getName());
                     }
-                    listener.onComplete(new MutableLiveData<>(products));
+                    listener.onComplete(products);
                 });
     }
+
 
 //    public void getAllProducts(Model.GetAllProductsListener listener) {
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();

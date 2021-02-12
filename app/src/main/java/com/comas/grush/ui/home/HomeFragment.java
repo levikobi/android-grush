@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.Navigation;
@@ -16,8 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.comas.grush.R;
+import com.comas.grush.model.Product;
 import com.comas.grush.ui.product.ProductListAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -36,12 +40,7 @@ public class HomeFragment extends Fragment {
         initializeViewHandlers();
         refreshProductList();
 
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//
-//            }
-//        });
+        mViewModel.getProductList().observe(getViewLifecycleOwner(), products -> mAdapter.notifyDataSetChanged());
 
         return root;
     }
@@ -65,7 +64,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void refreshProductList() {
-        mViewModel.refreshProductList(() -> mAdapter.notifyDataSetChanged());
+        mViewModel.refreshProductList();
         mSwipeRefreshLayout.setRefreshing(false);
     }
 }

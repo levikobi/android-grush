@@ -3,8 +3,10 @@ package com.comas.grush.model;
 import android.graphics.Bitmap;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class Model {
 
@@ -13,13 +15,26 @@ public class Model {
     private final ModelFirebase modelFirebase = new ModelFirebase();
     private final ModelRoom modelRoom = new ModelRoom();
 
+    private MutableLiveData<List<Product>> products = new MutableLiveData<>();
+
     private Model() { }
 
-    public interface GetAllProductsListener {
-        void onComplete(LiveData<List<Product>> products);
-    }
-    public void getAllProducts(GetAllProductsListener listener) {
-        modelFirebase.getAllProducts(listener);
+//    public interface GetAllProductsListener {
+//        void onComplete(LiveData<List<Product>> products);
+//    }
+//    public void getAllProducts(GetAllProductsListener listener) {
+//        modelFirebase.getAllProducts(listener);
+//    }
+
+
+    public LiveData<List<Product>> getAllProducts() {
+        modelFirebase.getAllProducts(new ModelFirebase.GetAllProductsListener() {
+            @Override
+            public void onComplete(List<Product> result) {
+                products.setValue(result);
+            }
+        });
+        return products;
     }
 
     public interface GetProductByIdListener {
