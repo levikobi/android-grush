@@ -14,6 +14,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -25,12 +26,12 @@ public class ModelFirebase {
     public interface GetAllProductsListener {
         void onComplete(List<Product> products);
     }
-
-    public void getAllProducts(long lastUpdated, GetAllProductsListener listener) {
+    public void getAllProducts(Long lastUpdated, GetAllProductsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(COLLECTION_PATH).get()
+        Timestamp timestamp = new Timestamp(lastUpdated);
+        List<Product> products = new LinkedList<>();
+        db.collection(COLLECTION_PATH).whereGreaterThanOrEqualTo("lastUpdated", timestamp).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<Product> products = new LinkedList<>();
                     Log.d("TAG", "***Getting products from Firebase***");
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         Product product = new Product();
@@ -39,25 +40,9 @@ public class ModelFirebase {
                         Log.d("TAG", product.getName());
                     }
                     listener.onComplete(products);
-                });
+                })
+                .addOnFailureListener(e -> listener.onComplete(products));
     }
-
-
-//    public void getAllProducts(Model.GetAllProductsListener listener) {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection(COLLECTION_PATH).get()
-//                .addOnSuccessListener(queryDocumentSnapshots -> {
-//                    List<Product> products = new LinkedList<>();
-//                    Log.d("TAG", "***Getting products from Firebase***");
-//                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-//                        Product product = new Product();
-//                        product.fromMap(doc.getData());
-//                        products.add(product);
-//                        Log.d("TAG", product.getName());
-//                    }
-//                    listener.onComplete(products);
-//                });
-//    }
 
     public void getProductById(String id, Model.GetProductByIdListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();

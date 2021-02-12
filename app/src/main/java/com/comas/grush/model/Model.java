@@ -25,11 +25,11 @@ public class Model {
         if (products == null) {
             products = modelRoom.getAllProducts();
         }
-        fetchDataFromFirebase();
+        fetchUpdatedDataFromFirebase();
         return products;
     }
 
-    private void fetchDataFromFirebase() {
+    private void fetchUpdatedDataFromFirebase() {
         SharedPreferences sharedPreferences = MyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
         long lastUpdated = sharedPreferences.getLong("lastUpdated", 0);
 
