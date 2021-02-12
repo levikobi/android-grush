@@ -1,5 +1,7 @@
 package com.comas.grush.model;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -12,7 +14,7 @@ import java.util.List;
 public interface ProductDao {
 
     @Query("select * from Product")
-    List<Product> getAll();
+    LiveData<List<Product>> getAll();
 
     @Query("select * from Product where id like :id limit 1")
     Product getById(String id);

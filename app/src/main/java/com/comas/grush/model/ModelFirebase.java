@@ -2,12 +2,7 @@ package com.comas.grush.model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,8 +17,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Properties;
-import java.util.function.Consumer;
 
 public class ModelFirebase {
 
@@ -33,7 +26,7 @@ public class ModelFirebase {
         void onComplete(List<Product> products);
     }
 
-    public void getAllProducts(GetAllProductsListener listener) {
+    public void getAllProducts(long lastUpdated, GetAllProductsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(COLLECTION_PATH).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {

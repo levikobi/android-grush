@@ -3,28 +3,17 @@ package com.comas.grush.model;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import java.util.List;
 
 public class ModelRoom {
     public interface GetAllProductsListener {
         void onComplete(List<Product> products);
     }
-    public void getAllProducts(GetAllProductsListener listener) {
-        class MyAsyncTask extends AsyncTask {
-            private List<Product> products;
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                products = AppLocalDB.db.productDao().getAll();
-                return null;
-            }
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-                listener.onComplete(products);
-            }
-        }
-        MyAsyncTask task = new MyAsyncTask();
-        task.execute();
+    public LiveData<List<Product>> getAllProducts() {
+        return AppLocalDB.db.productDao().getAll();
     }
 
     public interface GetProductByIdListener {

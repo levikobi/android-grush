@@ -1,12 +1,14 @@
 package com.comas.grush.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+
+import com.comas.grush.MyApplication;
 
 import java.util.List;
-import java.util.concurrent.Executors;
 
 public class Model {
 
@@ -15,26 +17,35 @@ public class Model {
     private final ModelFirebase modelFirebase = new ModelFirebase();
     private final ModelRoom modelRoom = new ModelRoom();
 
-    private MutableLiveData<List<Product>> products = new MutableLiveData<>();
+    private LiveData<List<Product>> products;
 
     private Model() { }
 
-//    public interface GetAllProductsListener {
-//        void onComplete(LiveData<List<Product>> products);
-//    }
-//    public void getAllProducts(GetAllProductsListener listener) {
-//        modelFirebase.getAllProducts(listener);
-//    }
-
-
     public LiveData<List<Product>> getAllProducts() {
-        modelFirebase.getAllProducts(new ModelFirebase.GetAllProductsListener() {
+        if (products == null) {
+            products = modelRoom.getAllProducts();
+        }
+        fetchDataFromFirebase();
+        return products;
+    }
+
+    private void fetchDataFromFirebase() {
+        SharedPreferences sharedPreferences = MyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
+        long lastUpdated = sharedPreferences.getLong("lastUpdated", 0);
+
+        modelFirebase.getAllProducts(lastUpdated, new ModelFirebase.GetAllProductsListener() {
             @Override
             public void onComplete(List<Product> result) {
-                products.setValue(result);
+                long lastU = 0;
+                for (Product product : result) {
+                    modelRoom.addProduct(product, null);
+                    if (product.getLastUpdated() > lastU) {
+                        lastU = product.getLastUpdated();
+                    }
+                }
+                sharedPreferences.edit().putLong("lastUpdated", lastU).apply();
             }
         });
-        return products;
     }
 
     public interface GetProductByIdListener {
