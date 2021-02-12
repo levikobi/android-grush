@@ -1,77 +1,71 @@
 package com.comas.grush.model;
 
-import android.os.AsyncTask;
-import android.util.Log;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 
-import java.util.LinkedList;
+import androidx.lifecycle.LiveData;
+
+import com.comas.grush.MyApplication;
+
 import java.util.List;
 
 public class Model {
 
     public final static Model instance = new Model();
 
+    private final ModelFirebase modelFirebase = new ModelFirebase();
+    private final ModelRoom modelRoom = new ModelRoom();
+
+    private LiveData<List<Product>> products;
+
     private Model() { }
 
-    public interface GetAllProductsListener {
-        void onComplete(List<Product> products);
-    }
-    public void getAllProducts(GetAllProductsListener listener) {
-        class MyAsyncTask extends AsyncTask {
-            private List<Product> products;
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                products = AppLocalDB.db.productDao().getAll();
-                return null;
-            }
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-                listener.onComplete(products);
-            }
+    public LiveData<List<Product>> getAllProducts() {
+        if (products == null) {
+            products = modelRoom.getAllProducts();
         }
-        MyAsyncTask task = new MyAsyncTask();
-        task.execute();
+        fetchUpdatedDataFromFirebase();
+        return products;
+    }
+
+    private void fetchUpdatedDataFromFirebase() {
+        SharedPreferences sharedPreferences = MyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
+        long lastUpdated = sharedPreferences.getLong("lastUpdated", 0);
+
+        modelFirebase.getAllProducts(lastUpdated, new ModelFirebase.GetAllProductsListener() {
+            @Override
+            public void onComplete(List<Product> result) {
+                long lastU = 0;
+                for (Product product : result) {
+                    modelRoom.addProduct(product, null);
+                    if (product.getLastUpdated() > lastU) {
+                        lastU = product.getLastUpdated();
+                    }
+                }
+                sharedPreferences.edit().putLong("lastUpdated", lastU).apply();
+            }
+        });
     }
 
     public interface GetProductByIdListener {
         void onComplete(Product product);
     }
-    public void getProductById(Integer id, GetProductByIdListener listener) {
-        class MyAsyncTask extends AsyncTask {
-            private Product product;
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                Log.d("TAG", String.valueOf(id));
-                product = AppLocalDB.db.productDao().getById(id);
-                return null;
-            }
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-                listener.onComplete(product);
-            }
-        }
-        MyAsyncTask task = new MyAsyncTask();
-        task.execute();
+    public void getProductById(String id, GetProductByIdListener listener) {
+        modelFirebase.getProductById(id, listener);
     }
 
     public interface AddProductListener {
         void onComplete();
     }
     public void addProduct(Product product, AddProductListener listener) {
-        class MyAsyncTask extends AsyncTask {
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                AppLocalDB.db.productDao().insertAll(product);
-                return null;
-            }
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-                if (listener != null) listener.onComplete();
-            }
-        }
-        MyAsyncTask task = new MyAsyncTask();
-        task.execute();
+        modelFirebase.addProduct(product, listener);
+    }
+
+    public interface UploadImageListener {
+        void onComplete(String url);
+    }
+    public void uploadImage(Bitmap imageBmp, String name, UploadImageListener listener) {
+        modelFirebase.uploadImage(imageBmp, name, listener);
     }
 }
