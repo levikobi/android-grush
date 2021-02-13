@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.comas.grush.R;
 import com.comas.grush.model.Product;
+import com.comas.grush.ui.gallery.GalleryFragmentDirections;
+import com.comas.grush.ui.gallery.GalleryViewModel;
 import com.comas.grush.ui.home.HomeFragmentDirections;
 import com.comas.grush.ui.home.HomeViewModel;
 import com.squareup.picasso.Picasso;
@@ -73,8 +75,14 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         @Override
         public void onClick(View v) {
             String productId = mViewModel.getProductList().getValue().get(getLayoutPosition()).getId();
-            Navigation.findNavController(v)
-                    .navigate(HomeFragmentDirections.actionHomeToProductDetails(productId));
+            if (mViewModel instanceof HomeViewModel) {
+                Navigation.findNavController(v)
+                        .navigate(HomeFragmentDirections.actionHomeToProductDetails(productId));
+            }
+            if (mViewModel instanceof GalleryViewModel) {
+                Navigation.findNavController(v)
+                        .navigate(GalleryFragmentDirections.actionGalleryToProductDetails(productId));
+            }
         }
     }
 }

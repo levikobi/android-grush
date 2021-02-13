@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.navigation.Navigation;
+
 import com.comas.grush.model.Model;
 import com.comas.grush.model.Product;
+import com.comas.grush.ui.gallery.GalleryFragmentDirections;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,25 +42,39 @@ public class ProductDetailsFragment extends ProductFragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        setContainerVisibility();
 
         String productId = ProductDetailsFragmentArgs.fromBundle(getArguments()).getProductId();
+        boolean editable = ProductDetailsFragmentArgs.fromBundle(getArguments()).getEditable();
+
+        setContainerVisibility(editable);
+
         Model.instance.getProductById(productId, product -> {
             mProduct = product;
             setContainerData();
+
+            mEditButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.findNavController(v)
+                            .navigate(ProductDetailsFragmentDirections.actionProductDetailsToProductEdit(productId));
+                }
+            });
         });
         return view;
     }
 
-    public void setContainerVisibility() {
-        mEditImageButton.setVisibility(View.GONE);
-        mDeleteButton.setVisibility(View.GONE);
-        mEditButton.setVisibility(View.GONE);
-        mSaveButton.setVisibility(View.GONE);
+    private void setContainerVisibility(boolean editable) {
         mProductNameEditText.setKeyListener(null);
         mProductNameEditText.setBackgroundResource(android.R.color.transparent);
         mProductDescEditText.setKeyListener(null);
         mProductDescEditText.setBackgroundResource(android.R.color.transparent);
+        mSaveButton.setVisibility(View.GONE);
+        mEditImageButton.setVisibility(View.GONE);
+
+        if (!editable) {
+            mDeleteButton.setVisibility(View.GONE);
+            mEditButton.setVisibility(View.GONE);
+        }
     }
 
     private void setContainerData() {

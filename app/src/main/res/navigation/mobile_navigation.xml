@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_home_to_productDetails"
-            app:destination="@id/productDetailsFragment" />
+            app:destination="@id/productDetailsFragment" >
+            <argument
+                android:name="editable"
+                android:defaultValue="false" />
+        </action>
         <action
             android:id="@+id/action_home_to_productCreate"
             app:destination="@id/productCreateFragment" />
@@ -22,7 +26,15 @@
         android:id="@+id/nav_gallery"
         android:name="com.comas.grush.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_gallery" >
+        <action
+            android:id="@+id/action_gallery_to_productDetails"
+            app:destination="@id/productDetailsFragment" >
+            <argument
+                android:name="editable"
+                android:defaultValue="true" />
+        </action>
+    </fragment>
 
     <fragment
         android:id="@+id/nav_slideshow"
@@ -42,6 +54,12 @@
         <argument
             android:name="product_id"
             app:argType="string" />
+        <argument
+            android:name="editable"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_productDetails_to_productEdit"
+            app:destination="@id/productEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/productCreateFragment"
@@ -63,4 +81,13 @@
         android:name="com.comas.grush.LogoutFragment"
         android:label="fragment_logout"
         tools:layout="@layout/fragment_logout" />
+    <fragment
+        android:id="@+id/productEditFragment"
+        android:name="com.comas.grush.ui.product.ProductEditFragment"
+        android:label="fragment_product_edit"
+        tools:layout="@layout/fragment_product_edit" >
+        <argument
+            android:name="product_id"
+            app:argType="string" />
+    </fragment>
 </navigation>
