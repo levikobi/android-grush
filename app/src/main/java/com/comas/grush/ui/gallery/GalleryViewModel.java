@@ -4,16 +4,25 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+import com.comas.grush.model.Model;
+import com.comas.grush.model.Product;
+import com.comas.grush.ui.product.ProductListViewModel;
 
-    private MutableLiveData<String> mText;
+import java.util.List;
+
+public class GalleryViewModel extends ProductListViewModel {
+
+    private LiveData<List<Product>> mProductList;
 
     public GalleryViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        mProductList = Model.instance.getAllProductsByOwner();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<List<Product>> getProductList() {
+        return mProductList;
+    }
+
+    public void refreshProductList() {
+        mProductList = Model.instance.getAllProductsByOwner();
     }
 }

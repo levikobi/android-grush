@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void initializeRecyclerView(View view) {
-        mAdapter = new ProductListAdapter(view.getContext());
+        mAdapter = new ProductListAdapter(view.getContext(), mViewModel);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
     }

@@ -13,13 +13,16 @@ import java.util.List;
 @Dao
 public interface ProductDao {
 
-    @Query("select * from Product")
+    @Query("SELECT * FROM Product")
     LiveData<List<Product>> getAll();
 
-    @Query("select * from Product where ownerId like :ownerId")
+    @Query("SELECT * FROM Product " +
+           "WHERE ownerId LIKE :ownerId")
     LiveData<List<Product>> getAllByOwnerId(String ownerId);
 
-    @Query("select * from Product where id like :id limit 1")
+    @Query("SELECT * FROM Product " +
+           "WHERE id LIKE :id " +
+           "LIMIT 1")
     Product getById(String id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

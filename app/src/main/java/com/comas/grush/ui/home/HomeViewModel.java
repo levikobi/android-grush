@@ -6,10 +6,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.comas.grush.model.Model;
 import com.comas.grush.model.Product;
+import com.comas.grush.ui.product.ProductListViewModel;
 
 import java.util.List;
 
-public class HomeViewModel extends ViewModel {
+public class HomeViewModel extends ProductListViewModel {
 
     private LiveData<List<Product>> mProductList;
 

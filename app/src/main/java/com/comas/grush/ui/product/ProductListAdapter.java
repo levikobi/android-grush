@@ -25,13 +25,13 @@ import java.util.List;
 
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ProductViewHolder> {
 
-    private final HomeViewModel mViewModel;
+    private final ProductListViewModel mViewModel;
 
     private final LayoutInflater mInflater;
 
-    public ProductListAdapter(Context context) {
+    public ProductListAdapter(Context context, ProductListViewModel viewModel) {
         mInflater = LayoutInflater.from(context);
-        mViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(HomeViewModel.class);
+        mViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(viewModel.getClass());
     }
 
     @NonNull
