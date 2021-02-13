@@ -1,4 +1,4 @@
-package com.comas.grush.model;
+ package com.comas.grush.model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
