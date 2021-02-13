@@ -16,6 +16,7 @@ public class Product {
     @PrimaryKey
     @NonNull
     private String id;
+    private String ownerId;
 
     private String name;
     private String desc;
@@ -26,6 +27,7 @@ public class Product {
     public Map<String, Object> toMap() {
         return new HashMap<String, Object>() {{
             put("id", id);
+            put("ownerId", ownerId);
             put("name", name);
             put("desc", desc);
             put("image", image);
@@ -35,6 +37,7 @@ public class Product {
 
     public void fromMap(Map<String, Object> map) {
         id = (String) map.get("id");
+        ownerId = (String) map.get("ownerId");
         name = (String) map.get("name");
         desc = (String) map.get("desc");
         image = (String) map.get("image");
@@ -47,6 +50,14 @@ public class Product {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getName() {
