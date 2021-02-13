@@ -31,5 +31,10 @@
             android:id="@+id/logoutFragment"
             android:icon="@drawable/ic_menu_logout"
             android:title="Log Out" />
+
+        <item
+            android:id="@+id/aboutFragment"
+            android:icon="@drawable/ic_menu_about"
+            android:title="About" />
     </group>
 </menu>
