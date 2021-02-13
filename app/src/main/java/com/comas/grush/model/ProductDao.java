@@ -16,6 +16,9 @@ public interface ProductDao {
     @Query("select * from Product")
     LiveData<List<Product>> getAll();
 
+    @Query("select * from Product where ownerId like :ownerId")
+    LiveData<List<Product>> getAllByOwnerId(String ownerId);
+
     @Query("select * from Product where id like :id limit 1")
     Product getById(String id);
 

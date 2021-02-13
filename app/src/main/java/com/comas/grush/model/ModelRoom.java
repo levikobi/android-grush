@@ -12,8 +12,13 @@ public class ModelRoom {
     public interface GetAllProductsListener {
         void onComplete(List<Product> products);
     }
+
     public LiveData<List<Product>> getAllProducts() {
         return AppLocalDB.db.productDao().getAll();
+    }
+
+    public LiveData<List<Product>> getAllProductsByOwnerId(String ownerId) {
+        return AppLocalDB.db.productDao().getAllByOwnerId(ownerId);
     }
 
     public interface GetProductByIdListener {

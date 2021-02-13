@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import androidx.lifecycle.LiveData;
 
 import com.comas.grush.MyApplication;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class Model {
     private final ModelRoom modelRoom = new ModelRoom();
 
     private LiveData<List<Product>> products;
+    private LiveData<List<Product>> productsByOwner;
 
     private Model() { }
 
@@ -27,6 +29,15 @@ public class Model {
         }
         fetchUpdatedDataFromFirebase();
         return products;
+    }
+
+    public LiveData<List<Product>> getAllProductsByOwner() {
+        if (productsByOwner == null) {
+            String ownerId = FirebaseAuth.getInstance().getUid();
+            productsByOwner = modelRoom.getAllProductsByOwnerId(ownerId);
+        }
+        fetchUpdatedDataFromFirebase();
+        return productsByOwner;
     }
 
     private void fetchUpdatedDataFromFirebase() {
