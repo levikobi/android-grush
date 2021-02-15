@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.comas.grush.R;
 import com.comas.grush.model.Model;
@@ -52,6 +53,7 @@ public class ProductFragment extends Fragment {
     protected Button mSaveButton;
     protected Button mEditButton;
     protected Button mDeleteButton;
+    protected ProgressBar mProgressBar;
 
     public static ProductFragment newInstance() {
         return new ProductFragment();
@@ -74,6 +76,7 @@ public class ProductFragment extends Fragment {
         mSaveButton = view.findViewById(R.id.product_frag_save_button);
         mEditButton = view.findViewById(R.id.product_frag_edit_button);
         mDeleteButton = view.findViewById(R.id.product_frag_delete_button);
+        mProgressBar = view.findViewById(R.id.product_frag_progress_bar);
     }
 
     private void initializeViewHandlers() {
@@ -116,7 +119,7 @@ public class ProductFragment extends Fragment {
     }
 
     private void handleEditImage(View view) {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+        final CharSequence[] options = { "Take Photo", "Choose from Gallery", "Cancel" };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Choose your product's picture");
@@ -136,6 +139,7 @@ public class ProductFragment extends Fragment {
     }
 
     private void handleSave(View view) {
+        loading(true);
         Product product = new Product();
         product.setName(mProductNameEditText.getText().toString());
         product.setDesc(mProductDescEditText.getText().toString());
@@ -143,6 +147,7 @@ public class ProductFragment extends Fragment {
         BitmapDrawable bitmapDrawable = (BitmapDrawable) mProductImageView.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
         Model.instance.uploadImage(bitmap, UUID.randomUUID().toString(), url -> {
+            loading(false);
             if (url == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Operation Failed");
@@ -154,5 +159,15 @@ public class ProductFragment extends Fragment {
                 Model.instance.addProduct(product, () -> Navigation.findNavController(view).popBackStack());
             }
         });
+    }
+
+    protected void loading(boolean isLoading) {
+        mProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        mEditImageButton.setEnabled(!isLoading);
+        mProductNameEditText.setEnabled(!isLoading);
+        mProductDescEditText.setEnabled(!isLoading);
+        mSaveButton.setEnabled(!isLoading);
+        mEditButton.setEnabled(!isLoading);
+        mDeleteButton.setEnabled(!isLoading);
     }
 }

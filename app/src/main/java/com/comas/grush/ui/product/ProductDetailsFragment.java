@@ -50,6 +50,7 @@ public class ProductDetailsFragment extends ProductFragment {
         setContainerVisibility(editable);
 
         Model.instance.getProductById(productId, product -> {
+            loading(false);
             mProduct = product;
             setContainerData();
 
@@ -62,11 +63,12 @@ public class ProductDetailsFragment extends ProductFragment {
             });
         });
 
-        mDeleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Model.instance.deleteProduct(mProduct, () -> Navigation.findNavController(view).popBackStack());
-            }
+        mDeleteButton.setOnClickListener(v -> {
+            loading(true);
+            Model.instance.deleteProduct(mProduct, () -> {
+                loading(false);
+                Navigation.findNavController(view).popBackStack();
+            });
         });
         return view;
     }
