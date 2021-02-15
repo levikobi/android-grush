@@ -10,4 +10,4 @@ Dan Hanegbi
 
 <img src="https://upload.wikimedia.org/wikipedia/he/8/88/LOGOMINHALNEW.png" width="200px;"/>
 
-### Lecturer: Dr. Eliahu Khalastchi
+### Lecturer: Dr. Eliav Menachi
