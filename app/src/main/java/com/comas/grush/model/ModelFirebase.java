@@ -61,6 +61,7 @@ public class ModelFirebase {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference newProductRef = db.collection(COLLECTION_PATH).document();
         product.setId(newProductRef.getId());
+        product.setRemoved(false);
         product.setOwnerId(FirebaseAuth.getInstance().getUid());
         newProductRef.set(product.toMap())
                 .addOnSuccessListener(aVoid -> {

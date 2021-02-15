@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase;
 
 import com.comas.grush.MyApplication;
 
-@Database(entities = {Product.class}, version = 17)
+@Database(entities = {Product.class}, version = 18)
 abstract class AppLocalDBRepository extends RoomDatabase {
     public abstract ProductDao productDao();
 }

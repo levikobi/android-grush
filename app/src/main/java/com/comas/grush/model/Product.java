@@ -23,7 +23,7 @@ public class Product {
     private String desc;
     private String image;
 
-    private Boolean isRemoved = false;
+    private Boolean isRemoved;
     private Long lastUpdated;
 
     public Map<String, Object> toMap() {
