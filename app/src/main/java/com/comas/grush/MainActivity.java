@@ -2,6 +2,8 @@ package com.comas.grush;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -52,6 +57,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        boolean res = super.onPrepareOptionsMenu(menu);
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Menu temp = navigationView.getMenu();
+        MenuItem slideshow = temp.findItem(R.id.nav_slideshow);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            slideshow.setTitle("Logout");
+            slideshow.setOnMenuItemClickListener(item -> {
+                FirebaseAuth.getInstance().signOut();
+                slideshow.setTitle("Login");
+
+                TextView text = findViewById(R.id.nav_header_user_email);
+                text.setText("Not logged in");
+
+
+                return false;
+            });
+        }
+        return res;
     }
 
     @Override

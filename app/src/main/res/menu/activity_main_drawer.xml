@@ -16,20 +16,5 @@
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_slideshow" />
-
-        <item
-            android:id="@+id/registerFragment"
-            android:icon="@drawable/ic_menu_register"
-            android:title="Register" />
-
-        <item
-            android:id="@+id/loginFragment"
-            android:icon="@drawable/ic_menu_login"
-            android:title="Login" />
-
-        <item
-            android:id="@+id/logoutFragment"
-            android:icon="@drawable/ic_menu_logout"
-            android:title="Log Out" />
     </group>
 </menu>
