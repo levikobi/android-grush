@@ -3,6 +3,7 @@ package com.comas.grush.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -72,5 +73,14 @@ public class Model {
     }
     public void uploadImage(Bitmap imageBmp, String name, UploadImageListener listener) {
         modelFirebase.uploadImage(imageBmp, name, listener);
+    }
+
+    public interface DeleteProductListener {
+        void onComplete();
+    }
+    public void deleteProduct(Product product, DeleteProductListener listener) {
+        // TODO - actual delete
+        modelRoom.deleteProduct(product, null);
+        modelFirebase.deleteProduct(product, listener);
     }
 }

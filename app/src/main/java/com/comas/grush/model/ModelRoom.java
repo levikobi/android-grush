@@ -62,4 +62,24 @@ public class ModelRoom {
         MyAsyncTask task = new MyAsyncTask();
         task.execute();
     }
+
+    public interface DeleteProductListener {
+        void onComplete();
+    }
+    public void deleteProduct(Product product, DeleteProductListener listener) {
+        class MyAsyncTask extends AsyncTask {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                AppLocalDB.db.productDao().delete(product);
+                return null;
+            }
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                if (listener != null) listener.onComplete();
+            }
+        }
+        MyAsyncTask task = new MyAsyncTask();
+        task.execute();
+    }
 }

@@ -2,6 +2,7 @@ package com.comas.grush.ui.product;
 
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,13 @@ public class ProductDetailsFragment extends ProductFragment {
                             .navigate(ProductDetailsFragmentDirections.actionProductDetailsToProductEdit(productId));
                 }
             });
+        });
+
+        mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Model.instance.deleteProduct(mProduct, () -> Navigation.findNavController(view).popBackStack());
+            }
         });
         return view;
     }

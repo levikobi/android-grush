@@ -32,7 +32,10 @@ public class ModelFirebase {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Timestamp timestamp = new Timestamp(lastUpdated);
         List<Product> products = new LinkedList<>();
-        db.collection(COLLECTION_PATH).whereGreaterThanOrEqualTo("lastUpdated", timestamp).get()
+        db.collection(COLLECTION_PATH)
+                .whereGreaterThanOrEqualTo("lastUpdated", timestamp)
+                .whereEqualTo("isRemoved", false)
+                .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     Log.d("TAG", "***Getting products from Firebase***");
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
@@ -98,6 +101,16 @@ public class ModelFirebase {
                 });
             }
         });
+    }
 
+    public void deleteProduct(Product product, Model.DeleteProductListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(COLLECTION_PATH).document(product.getId()).update("isRemoved", true)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        if (listener != null) listener.onComplete();
+                    }
+                });
     }
 }
