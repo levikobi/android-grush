@@ -4,22 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.comas.grush.R;
-import com.comas.grush.ui.home.HomeFragmentDirections;
-import com.comas.grush.ui.home.HomeViewModel;
 import com.comas.grush.ui.product.ProductListAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -48,12 +42,12 @@ public class GalleryFragment extends Fragment {
 
     private void initializeViewElements(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
-        mRecyclerView = view.findViewById(R.id.recyclerview);
+        mRecyclerView = view.findViewById(R.id.gallery_frag_recyclerview);
         mAddProductFab = view.findViewById(R.id.add_fab);
     }
 
     private void initializeRecyclerView(View view) {
-        mAdapter = new ProductListAdapter(view.getContext(), mViewModel);
+        mAdapter = new ProductListAdapter(getContext(), mViewModel);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
     }

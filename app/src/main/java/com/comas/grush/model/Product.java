@@ -1,6 +1,7 @@
 package com.comas.grush.model;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -22,6 +23,7 @@ public class Product {
     private String desc;
     private String image;
 
+    private Boolean isRemoved = false;
     private Long lastUpdated;
 
     public Map<String, Object> toMap() {
@@ -31,6 +33,7 @@ public class Product {
             put("name", name);
             put("desc", desc);
             put("image", image);
+            put("isRemoved", isRemoved);
             put("lastUpdated", FieldValue.serverTimestamp());
         }};
     }
@@ -41,6 +44,7 @@ public class Product {
         name = (String) map.get("name");
         desc = (String) map.get("desc");
         image = (String) map.get("image");
+        isRemoved = (Boolean) map.get("isRemoved");
         lastUpdated = ((Timestamp) map.get("lastUpdated")).toDate().getTime();
     }
 
@@ -82,6 +86,14 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Boolean getRemoved() {
+        return isRemoved;
+    }
+
+    public void setRemoved(Boolean removed) {
+        isRemoved = removed;
     }
 
     public Long getLastUpdated() {

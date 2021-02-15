@@ -19,7 +19,6 @@ public class Model {
     private final ModelRoom modelRoom = new ModelRoom();
 
     private LiveData<List<Product>> products;
-    private LiveData<List<Product>> productsByOwner;
 
     private Model() { }
 
@@ -32,10 +31,8 @@ public class Model {
     }
 
     public LiveData<List<Product>> getAllProductsByOwner() {
-        if (productsByOwner == null) {
-            String ownerId = FirebaseAuth.getInstance().getUid();
-            productsByOwner = modelRoom.getAllProductsByOwnerId(ownerId);
-        }
+        String ownerId = FirebaseAuth.getInstance().getUid();
+        LiveData<List<Product>> productsByOwner = modelRoom.getAllProductsByOwnerId(ownerId);
         fetchUpdatedDataFromFirebase();
         return productsByOwner;
     }
@@ -44,18 +41,15 @@ public class Model {
         SharedPreferences sharedPreferences = MyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
         long lastUpdated = sharedPreferences.getLong("lastUpdated", 0);
 
-        modelFirebase.getAllProducts(lastUpdated, new ModelFirebase.GetAllProductsListener() {
-            @Override
-            public void onComplete(List<Product> result) {
-                long lastU = 0;
-                for (Product product : result) {
-                    modelRoom.addProduct(product, null);
-                    if (product.getLastUpdated() > lastU) {
-                        lastU = product.getLastUpdated();
-                    }
+        modelFirebase.getAllProducts(lastUpdated, result -> {
+            long lastU = 0;
+            for (Product product : result) {
+                modelRoom.addProduct(product, null);
+                if (product.getLastUpdated() > lastU) {
+                    lastU = product.getLastUpdated();
                 }
-                sharedPreferences.edit().putLong("lastUpdated", lastU).apply();
             }
+            sharedPreferences.edit().putLong("lastUpdated", lastU).apply();
         });
     }
 
