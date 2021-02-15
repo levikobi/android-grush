@@ -48,7 +48,6 @@ public class SlideshowFragment extends Fragment {
         return root;
     }
 
-
     private void initializeViewElements(View view) {
         mAuth = FirebaseAuth.getInstance();
         mEmailEditText = view.findViewById(R.id.auth_frag_email_edittext);
@@ -78,8 +77,23 @@ public class SlideshowFragment extends Fragment {
                         Menu temp = navigationView.getMenu();
                         MenuItem slideshow = temp.findItem(R.id.nav_slideshow);
                         slideshow.setTitle("Logout");
-                        TextView text = view.findViewById(R.id.nav_header_user_email);
+
+
+                        View headerView = navigationView.getHeaderView(0);
+                        TextView text = headerView.findViewById(R.id.nav_header_user_email);
                         text.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+                        slideshow.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                FirebaseAuth.getInstance().signOut();
+                                slideshow.setTitle("Login");
+                                text.setText("Not logged in");
+
+
+                                return false;
+                            }
+                        });
 
                         Navigation.findNavController(view).popBackStack();
 

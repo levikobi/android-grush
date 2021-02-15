@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         boolean res = super.onPrepareOptionsMenu(menu);
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         Menu temp = navigationView.getMenu();
         MenuItem slideshow = temp.findItem(R.id.nav_slideshow);
@@ -78,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
                 return false;
             });
+        } else {
+            slideshow.setTitle("Login");
         }
         return res;
     }
