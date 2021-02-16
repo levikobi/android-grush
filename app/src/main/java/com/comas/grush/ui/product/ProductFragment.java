@@ -2,9 +2,7 @@ package com.comas.grush.ui.product;
 
 import androidx.lifecycle.ViewModelProvider;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -20,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,15 +26,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.comas.grush.R;
 import com.comas.grush.model.Model;
 import com.comas.grush.model.Product;
 
-import java.util.Objects;
 import java.util.UUID;
 
-import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 public class ProductFragment extends Fragment {
@@ -55,6 +51,8 @@ public class ProductFragment extends Fragment {
     protected Button mEditButton;
     protected Button mDeleteButton;
     protected ProgressBar mProgressBar;
+
+    private boolean pictureSelected;
 
     public static ProductFragment newInstance() {
         return new ProductFragment();
@@ -100,6 +98,7 @@ public class ProductFragment extends Fragment {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 mProductImageView.setImageBitmap(rotateBitmap(imageBitmap, 90));
+                pictureSelected = true;
                 break;
             case REQUEST_EXTERNAL_CONTENT:
                 // TODO: fix uploading from gallery
@@ -114,6 +113,7 @@ public class ProductFragment extends Fragment {
                     String picturePath = cursor.getString(columnIndex);
                     mProductImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                     cursor.close();
+                    pictureSelected = true;
                 }
                 break;
         }
@@ -140,15 +140,19 @@ public class ProductFragment extends Fragment {
     }
 
     private void handleSave(View view) {
-        loading(true);
+        runLoadingAnimation(true);
         Product product = new Product();
         product.setName(mProductNameEditText.getText().toString());
         product.setDesc(mProductDescEditText.getText().toString());
 
+        if (!pictureSelected) {
+
+        }
+
         BitmapDrawable bitmapDrawable = (BitmapDrawable) mProductImageView.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
         Model.instance.uploadImage(bitmap, UUID.randomUUID().toString(), url -> {
-            loading(false);
+            runLoadingAnimation(false);
             if (url == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Operation Failed");
@@ -157,12 +161,15 @@ public class ProductFragment extends Fragment {
                 builder.show();
             } else {
                 product.setImage(url);
-                Model.instance.addProduct(product, () -> Navigation.findNavController(view).popBackStack());
+                Model.instance.addProduct(product, () -> {
+                    Toast.makeText(getContext(), "Successfully added a new product", Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(view).popBackStack();
+                });
             }
         });
     }
 
-    protected void loading(boolean isLoading) {
+    protected void runLoadingAnimation(boolean isLoading) {
         mProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         mEditImageButton.setEnabled(!isLoading);
         mProductNameEditText.setEnabled(!isLoading);
@@ -171,7 +178,6 @@ public class ProductFragment extends Fragment {
         mEditButton.setEnabled(!isLoading);
         mDeleteButton.setEnabled(!isLoading);
     }
-
 
     private Bitmap rotateBitmap(Bitmap source, float angle) {
         Matrix matrix = new Matrix();

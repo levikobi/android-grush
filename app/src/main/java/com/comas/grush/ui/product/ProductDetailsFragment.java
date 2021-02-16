@@ -2,16 +2,15 @@ package com.comas.grush.ui.product;
 
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.navigation.Navigation;
 
 import com.comas.grush.model.Model;
 import com.comas.grush.model.Product;
-import com.comas.grush.ui.gallery.GalleryFragmentDirections;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +49,7 @@ public class ProductDetailsFragment extends ProductFragment {
         setContainerVisibility(editable);
 
         Model.instance.getProductById(productId, product -> {
-            loading(false);
+            runLoadingAnimation(false);
             mProduct = product;
             setContainerData();
 
@@ -64,9 +63,10 @@ public class ProductDetailsFragment extends ProductFragment {
         });
 
         mDeleteButton.setOnClickListener(v -> {
-            loading(true);
+            runLoadingAnimation(true);
             Model.instance.deleteProduct(mProduct, () -> {
-                loading(false);
+                runLoadingAnimation(false);
+                Toast.makeText(getContext(), "Successfully deleted the product", Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(view).popBackStack();
             });
         });

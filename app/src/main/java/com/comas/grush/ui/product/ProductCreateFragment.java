@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.comas.grush.R;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -63,7 +61,7 @@ public class ProductCreateFragment extends ProductFragment {
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        loading(false);
+        runLoadingAnimation(false);
         mEditButton.setVisibility(View.GONE);
         mDeleteButton.setVisibility(View.GONE);
         return view;
