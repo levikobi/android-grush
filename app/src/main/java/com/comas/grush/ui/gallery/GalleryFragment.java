@@ -45,7 +45,6 @@ public class GalleryFragment extends Fragment {
             displayLoginAlertDialog(root);
         }
 
-
         mViewModel.getProductList().observe(getViewLifecycleOwner(), products -> mAdapter.notifyDataSetChanged());
 
         return root;
@@ -65,8 +64,8 @@ public class GalleryFragment extends Fragment {
 
     private void initializeViewHandlers() {
         mSwipeRefreshLayout.setOnRefreshListener(this::refreshProductList);
-//        mAddProductFab.setOnClickListener(view -> Navigation.findNavController(view)
-//                .navigate(HomeFragmentDirections.actionHomeToProductCreate()));
+        mAddProductFab.setOnClickListener(view -> Navigation.findNavController(view)
+                .navigate(GalleryFragmentDirections.actionGalleryToProductCreate()));
     }
 
     private void refreshProductList() {

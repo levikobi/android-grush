@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_gallery_to_slideshow"
             app:destination="@id/nav_slideshow" />
+        <action
+            android:id="@+id/action__gallery_to_productCreate"
+            app:destination="@id/productCreateFragment" />
     </fragment>
 
     <fragment

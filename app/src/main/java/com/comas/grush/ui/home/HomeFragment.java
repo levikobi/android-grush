@@ -25,7 +25,6 @@ public class HomeFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private ProductListAdapter mAdapter;
-    private FloatingActionButton mAddProductFab;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
@@ -44,7 +43,6 @@ public class HomeFragment extends Fragment {
     private void initializeViewElements(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
         mRecyclerView = view.findViewById(R.id.home_frag_recyclerview);
-        mAddProductFab = view.findViewById(R.id.add_fab);
     }
 
     private void initializeRecyclerView(View view) {
@@ -55,8 +53,6 @@ public class HomeFragment extends Fragment {
 
     private void initializeViewHandlers() {
         mSwipeRefreshLayout.setOnRefreshListener(this::refreshProductList);
-        mAddProductFab.setOnClickListener(view -> Navigation.findNavController(view)
-                .navigate(HomeFragmentDirections.actionHomeToProductCreate()));
     }
 
     private void refreshProductList() {
