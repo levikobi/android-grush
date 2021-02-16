@@ -10,6 +10,7 @@
         android:id="@+id/product_frag_image"
         android:layout_width="0dp"
         android:layout_height="225dp"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_menu_gallery"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
