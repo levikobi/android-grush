@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -98,7 +99,7 @@ public class ProductFragment extends Fragment {
             case REQUEST_IMAGE_CAPTURE:
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                mProductImageView.setImageBitmap(imageBitmap);
+                mProductImageView.setImageBitmap(rotateBitmap(imageBitmap, 90));
                 break;
             case REQUEST_EXTERNAL_CONTENT:
                 // TODO: fix uploading from gallery
@@ -169,5 +170,12 @@ public class ProductFragment extends Fragment {
         mSaveButton.setEnabled(!isLoading);
         mEditButton.setEnabled(!isLoading);
         mDeleteButton.setEnabled(!isLoading);
+    }
+
+
+    private Bitmap rotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 }
