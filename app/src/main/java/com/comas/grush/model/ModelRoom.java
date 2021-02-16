@@ -9,9 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 public class ModelRoom {
-    public interface GetAllProductsListener {
-        void onComplete(List<Product> products);
-    }
 
     public LiveData<List<Product>> getAllProducts() {
         return AppLocalDB.db.productDao().getAll();
@@ -21,10 +18,7 @@ public class ModelRoom {
         return AppLocalDB.db.productDao().getAllByOwnerId(ownerId);
     }
 
-    public interface GetProductByIdListener {
-        void onComplete(Product product);
-    }
-    public void getProductById(String id, GetProductByIdListener listener) {
+    public void getProductById(String id, Model.GetProductByIdListener listener) {
         class MyAsyncTask extends AsyncTask {
             private Product product;
             @Override

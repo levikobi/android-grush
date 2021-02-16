@@ -58,7 +58,7 @@ public class Model {
         void onComplete(Product product);
     }
     public void getProductById(String id, GetProductByIdListener listener) {
-        modelFirebase.getProductById(id, listener);
+        modelRoom.getProductById(id, listener);
     }
 
     public interface AddProductListener {
