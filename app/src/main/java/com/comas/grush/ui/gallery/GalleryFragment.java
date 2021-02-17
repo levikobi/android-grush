@@ -1,7 +1,6 @@
 package com.comas.grush.ui.gallery;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.comas.grush.MyApplication;
 import com.comas.grush.R;
-import com.comas.grush.ui.home.HomeFragmentDirections;
+import com.comas.grush.model.Model;
 import com.comas.grush.ui.product.ProductListAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class GalleryFragment extends Fragment {
 
@@ -41,7 +38,7 @@ public class GalleryFragment extends Fragment {
         initializeViewHandlers();
         refreshProductList();
 
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+        if (!Model.users.isLoggedIn()) {
             displayLoginAlertDialog(root);
         }
 

@@ -54,10 +54,6 @@ public class ProductFragment extends Fragment {
 
     private boolean pictureSelected;
 
-    public static ProductFragment newInstance() {
-        return new ProductFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {

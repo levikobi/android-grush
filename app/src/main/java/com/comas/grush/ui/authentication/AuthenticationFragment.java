@@ -18,9 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.comas.grush.R;
+import com.comas.grush.model.Model;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class AuthenticationFragment extends Fragment {
 
@@ -95,37 +94,32 @@ public class AuthenticationFragment extends Fragment {
     }
 
     private void login(View view, String email, String password) {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    runLoadingAnimation(false);
-                    if (task.isSuccessful()) {
-                        Toast.makeText(getContext(), "Successfully logged in", Toast.LENGTH_SHORT).show();
-                        updateUI();
-                        Navigation.findNavController(view).popBackStack();
-                    } else {
-                        Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        Model.users.login(email, password, isSuccessful -> {
+            runLoadingAnimation(false);
+            if (isSuccessful) {
+                Toast.makeText(getContext(), "Successfully logged in", Toast.LENGTH_SHORT).show();
+                updateUI();
+                Navigation.findNavController(view).popBackStack();
+            } else {
+                Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void register(View view, String email, String password) {
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(mNameEditText.getText().toString())
-                                .build();
-                        FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates).addOnCompleteListener(task1 -> {
-                            updateUI();
-                            runLoadingAnimation(false);
-                            Toast.makeText(getContext(), "Successfully registered", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(view).popBackStack();
-                        });
-                    } else {
-                        runLoadingAnimation(false);
-                        Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
-                    }
+        Model.users.register(email, password, isSuccessful -> {
+            if (isSuccessful) {
+                Model.users.updateDisplayName(mNameEditText.getText().toString(), () -> {
+                    updateUI();
+                    runLoadingAnimation(false);
+                    Toast.makeText(getContext(), "Successfully registered", Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(view).popBackStack();
                 });
+            } else {
+                runLoadingAnimation(false);
+                Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void updateUI() {
@@ -135,14 +129,13 @@ public class AuthenticationFragment extends Fragment {
         slideshow.setTitle("Log Out");
         View headerView = navigationView.getHeaderView(0);
         TextView userEmail = headerView.findViewById(R.id.nav_header_user_email);
-        userEmail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        userEmail.setText(Model.users.getEmail());
 
         TextView userName = headerView.findViewById(R.id.nav_header_user_name);
-        String displayName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        userName.setText(displayName);
+        userName.setText(Model.users.getDisplayName());
 
         slideshow.setOnMenuItemClickListener(item -> {
-            FirebaseAuth.getInstance().signOut();
+            Model.users.signOut();
             slideshow.setTitle("Login");
             userEmail.setText("Not logged in");
             userName.setText("Anonymous");
