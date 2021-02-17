@@ -80,5 +80,8 @@
         <argument
             android:name="product_id"
             app:argType="string" />
+        <action
+            android:id="@+id/action_productEdit_to__gallery"
+            app:destination="@id/nav_gallery" />
     </fragment>
 </navigation>

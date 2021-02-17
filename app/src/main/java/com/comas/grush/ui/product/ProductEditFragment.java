@@ -1,17 +1,24 @@
 package com.comas.grush.ui.product;
 
+import android.app.AlertDialog;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.comas.grush.R;
 import com.comas.grush.model.Model;
 import com.comas.grush.model.Product;
 import com.squareup.picasso.Picasso;
+
+import java.util.UUID;
 
 public class ProductEditFragment extends ProductFragment {
 
@@ -25,8 +32,10 @@ public class ProductEditFragment extends ProductFragment {
         setContainerVisibility();
 
         Model.instance.getProductById(productId, product -> {
+            runLoadingAnimation(false);
             mProduct = product;
             setContainerData();
+            initializeViewHandlers();
         });
         return view;
     }
@@ -42,5 +51,39 @@ public class ProductEditFragment extends ProductFragment {
         if (mProduct.getImage() != null) {
             Picasso.get().load(mProduct.getImage()).into(mProductImageView);
         }
+    }
+
+    private void initializeViewHandlers() {
+        mSaveButton.setOnClickListener(this::handleSave);
+    }
+
+    private void handleSave(View view) {
+        runLoadingAnimation(true);
+        // 1. Delete current product.
+        // 2. Create a new product from the new data.
+        Product newProduct = new Product();
+        newProduct.setName(mProductNameEditText.getText().toString());
+        newProduct.setDesc(mProductDescEditText.getText().toString());
+
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) mProductImageView.getDrawable();
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+        Model.instance.uploadImage(bitmap, UUID.randomUUID().toString(), url -> {
+
+            if (url == null) {
+                runLoadingAnimation(false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Operation Failed");
+                builder.setMessage("Saving image failed. Please try again later.");
+                builder.setNeutralButton("OK", (dialog, which) -> dialog.dismiss());
+                builder.show();
+            } else {
+                newProduct.setImage(url);
+                Model.instance.editProduct(mProduct, newProduct, () -> {
+                    runLoadingAnimation(false);
+                    Toast.makeText(getContext(), "Successfully edited your product", Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(view).navigate(ProductEditFragmentDirections.actionProductEditToGallery());
+                });
+            }
+        });
     }
 }

@@ -27,18 +27,21 @@ public class Model {
         if (products == null) {
             products = modelRoom.getAllProducts();
         }
-        fetchUpdatedDataFromFirebase();
+        fetchUpdatedDataFromFirebase(null);
         return products;
     }
 
     public LiveData<List<Product>> getAllProductsByOwner() {
         String ownerId = FirebaseAuth.getInstance().getUid();
         LiveData<List<Product>> productsByOwner = modelRoom.getAllProductsByOwnerId(ownerId);
-        fetchUpdatedDataFromFirebase();
+        fetchUpdatedDataFromFirebase(null);
         return productsByOwner;
     }
 
-    private void fetchUpdatedDataFromFirebase() {
+    public interface UpdateListener {
+        void onComplete();
+    }
+    private void fetchUpdatedDataFromFirebase(UpdateListener listener) {
         SharedPreferences sharedPreferences = MyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
         long lastUpdated = sharedPreferences.getLong("lastUpdated", 0);
 
@@ -51,6 +54,7 @@ public class Model {
                 }
             }
             sharedPreferences.edit().putLong("lastUpdated", lastU).apply();
+            if (listener != null) listener.onComplete();
         });
     }
 
@@ -66,6 +70,16 @@ public class Model {
     }
     public void addProduct(Product product, AddProductListener listener) {
         modelFirebase.addProduct(product, listener);
+    }
+
+    public interface EditProductListener {
+        void onComplete();
+    }
+    public void editProduct(Product oldVersion, Product newVersion, EditProductListener listener) {
+        deleteProduct(oldVersion, null);
+        addProduct(newVersion, () -> {
+            fetchUpdatedDataFromFirebase(listener::onComplete);
+        });
     }
 
     public interface UploadImageListener {
