@@ -70,6 +70,7 @@ public class GalleryFragment extends Fragment {
 
     private void refreshProductList() {
         mViewModel.refreshProductList();
+        mViewModel.getProductList().observe(getViewLifecycleOwner(), products -> mAdapter.notifyDataSetChanged());
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
