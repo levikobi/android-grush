@@ -19,26 +19,6 @@ public class ProductDetailsFragment extends ProductFragment {
 
     private Product mProduct;
 
-    public ProductDetailsFragment() {
-        // Required empty public constructor
-    }
-
-    // TODO: Rename and change types and number of parameters
-    public static ProductDetailsFragment newInstance(String param1, String param2) {
-        ProductDetailsFragment fragment = new ProductDetailsFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
-    }
-
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);

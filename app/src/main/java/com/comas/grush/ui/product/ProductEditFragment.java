@@ -17,29 +17,8 @@ public class ProductEditFragment extends ProductFragment {
 
     private Product mProduct;
 
-    public ProductEditFragment() {
-        // Required empty public constructor
-    }
-
-    public static ProductEditFragment newInstance() {
-        ProductEditFragment fragment = new ProductEditFragment();
-        Bundle args = new Bundle();
-
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         String productId = ProductEditFragmentArgs.fromBundle(getArguments()).getProductId();
 
