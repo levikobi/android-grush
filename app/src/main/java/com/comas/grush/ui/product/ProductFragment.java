@@ -163,7 +163,7 @@ public class ProductFragment extends Fragment {
                 builder.show();
             } else {
                 product.setImage(url);
-                Model.products.addProduct(product, () -> {
+                Model.products.add(product, () -> {
                     Toast.makeText(getContext(), "Successfully added a new product", Toast.LENGTH_SHORT).show();
                     Navigation.findNavController(view).popBackStack();
                 });

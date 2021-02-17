@@ -13,7 +13,7 @@ public class HomeViewModel extends ProductListViewModel {
     private LiveData<List<Product>> mProductList;
 
     public HomeViewModel() {
-        mProductList = Model.products.getAllProducts();
+        mProductList = Model.products.getAll();
     }
 
     public LiveData<List<Product>> getProductList() {
@@ -21,6 +21,6 @@ public class HomeViewModel extends ProductListViewModel {
     }
 
     public void refreshProductList() {
-        mProductList = Model.products.getAllProducts();
+        mProductList = Model.products.getAll();
     }
 }

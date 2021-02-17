@@ -11,15 +11,15 @@ import java.util.List;
 
 public class ModelRoom {
 
-    public LiveData<List<Product>> getAllProducts() {
+    public LiveData<List<Product>> getAll() {
         return AppLocalDB.db.productDao().getAll();
     }
 
-    public LiveData<List<Product>> getAllProductsByOwnerId(String ownerId) {
+    public LiveData<List<Product>> getAllByOwnerId(String ownerId) {
         return AppLocalDB.db.productDao().getAllByOwnerId(ownerId);
     }
 
-    public void getProductById(String id, ProductModel.GetProductByIdListener listener) {
+    public void getById(String id, ProductModel.GetByIdListener listener) {
         class MyAsyncTask extends AsyncTask {
             private Product product;
             @Override
@@ -38,10 +38,10 @@ public class ModelRoom {
         task.execute();
     }
 
-    public interface AddProductListener {
+    public interface AddListener {
         void onComplete();
     }
-    public void addProduct(Product product, AddProductListener listener) {
+    public void add(Product product, AddListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -58,10 +58,10 @@ public class ModelRoom {
         task.execute();
     }
 
-    public interface DeleteProductListener {
+    public interface DeleteListener {
         void onComplete();
     }
-    public void deleteProduct(Product product, DeleteProductListener listener) {
+    public void delete(Product product, DeleteListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {

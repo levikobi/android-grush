@@ -24,10 +24,10 @@ public class ModelFirebase {
 
     private static final String COLLECTION_PATH = "products";
 
-    public interface GetAllProductsListener {
+    public interface GetAllListener {
         void onComplete(List<Product> products);
     }
-    public void getAllProducts(Long lastUpdated, GetAllProductsListener listener) {
+    public void getAll(Long lastUpdated, GetAllListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Timestamp timestamp = new Timestamp(lastUpdated);
         List<Product> products = new LinkedList<>();
@@ -48,7 +48,7 @@ public class ModelFirebase {
                 .addOnFailureListener(e -> listener.onComplete(products));
     }
 
-    public void getProductById(String id, ProductModel.GetProductByIdListener listener) {
+    public void getById(String id, ProductModel.GetByIdListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(COLLECTION_PATH).document(id).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -59,7 +59,7 @@ public class ModelFirebase {
                 });
     }
 
-    public void addProduct(Product product, ProductModel.AddProductListener listener) {
+    public void add(Product product, ProductModel.AddListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference newProductRef = db.collection(COLLECTION_PATH).document();
         product.setId(newProductRef.getId());
@@ -102,7 +102,7 @@ public class ModelFirebase {
         });
     }
 
-    public void deleteProduct(Product product, ProductModel.DeleteProductListener listener) {
+    public void delete(Product product, ProductModel.DeleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(COLLECTION_PATH).document(product.getId()).update("isRemoved", true)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -13,7 +13,7 @@ public class GalleryViewModel extends ProductListViewModel {
     private LiveData<List<Product>> mProductList;
 
     public GalleryViewModel() {
-        mProductList = Model.products.getAllProductsByOwner();
+        mProductList = Model.products.getAllByOwner();
     }
 
     public LiveData<List<Product>> getProductList() {
@@ -21,6 +21,6 @@ public class GalleryViewModel extends ProductListViewModel {
     }
 
     public void refreshProductList() {
-        mProductList = Model.products.getAllProductsByOwner();
+        mProductList = Model.products.getAllByOwner();
     }
 }

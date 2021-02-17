@@ -29,7 +29,7 @@ public class ProductEditFragment extends ProductFragment {
 
         setContainerVisibility();
 
-        Model.products.getProductById(productId, product -> {
+        Model.products.getById(productId, product -> {
             runLoadingAnimation(false);
             mProduct = product;
             setContainerData();
@@ -76,7 +76,7 @@ public class ProductEditFragment extends ProductFragment {
                 builder.show();
             } else {
                 newProduct.setImage(url);
-                Model.products.editProduct(mProduct, newProduct, () -> {
+                Model.products.edit(mProduct, newProduct, () -> {
                     runLoadingAnimation(false);
                     Toast.makeText(getContext(), "Successfully edited your product", Toast.LENGTH_SHORT).show();
                     Navigation.findNavController(view).navigate(ProductEditFragmentDirections.actionProductEditToGallery());

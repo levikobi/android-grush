@@ -28,7 +28,7 @@ public class ProductDetailsFragment extends ProductFragment {
 
         setContainerVisibility(editable);
 
-        Model.products.getProductById(productId, product -> {
+        Model.products.getById(productId, product -> {
             runLoadingAnimation(false);
             mProduct = product;
             setContainerData();
@@ -72,7 +72,7 @@ public class ProductDetailsFragment extends ProductFragment {
 
     private void handleDelete(View view) {
         runLoadingAnimation(true);
-        Model.products.deleteProduct(mProduct, () -> {
+        Model.products.delete(mProduct, () -> {
             runLoadingAnimation(false);
             Toast.makeText(getContext(), "Successfully deleted the product", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(view).popBackStack();

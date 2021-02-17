@@ -22,17 +22,17 @@ public class ProductModel {
 
     private ProductModel() { }
 
-    public LiveData<List<Product>> getAllProducts() {
+    public LiveData<List<Product>> getAll() {
         if (products == null) {
-            products = modelRoom.getAllProducts();
+            products = modelRoom.getAll();
         }
         fetchUpdatedDataFromFirebase(null);
         return products;
     }
 
-    public LiveData<List<Product>> getAllProductsByOwner() {
+    public LiveData<List<Product>> getAllByOwner() {
         String ownerId = FirebaseAuth.getInstance().getUid();
-        LiveData<List<Product>> productsByOwner = modelRoom.getAllProductsByOwnerId(ownerId);
+        LiveData<List<Product>> productsByOwner = modelRoom.getAllByOwnerId(ownerId);
         fetchUpdatedDataFromFirebase(null);
         return productsByOwner;
     }
@@ -44,10 +44,10 @@ public class ProductModel {
         SharedPreferences sharedPreferences = MyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
         long lastUpdated = sharedPreferences.getLong("lastUpdated", 0);
 
-        modelFirebase.getAllProducts(lastUpdated, result -> {
+        modelFirebase.getAll(lastUpdated, result -> {
             long lastU = 0;
             for (Product product : result) {
-                modelRoom.addProduct(product, null);
+                modelRoom.add(product, null);
                 if (product.getLastUpdated() > lastU) {
                     lastU = product.getLastUpdated();
                 }
@@ -57,26 +57,26 @@ public class ProductModel {
         });
     }
 
-    public interface GetProductByIdListener {
+    public interface GetByIdListener {
         void onComplete(Product product);
     }
-    public void getProductById(String id, GetProductByIdListener listener) {
-        modelRoom.getProductById(id, listener);
+    public void getById(String id, GetByIdListener listener) {
+        modelRoom.getById(id, listener);
     }
 
-    public interface AddProductListener {
+    public interface AddListener {
         void onComplete();
     }
-    public void addProduct(Product product, AddProductListener listener) {
-        modelFirebase.addProduct(product, listener);
+    public void add(Product product, AddListener listener) {
+        modelFirebase.add(product, listener);
     }
 
-    public interface EditProductListener {
+    public interface EditListener {
         void onComplete();
     }
-    public void editProduct(Product oldVersion, Product newVersion, EditProductListener listener) {
-        deleteProduct(oldVersion, null);
-        addProduct(newVersion, () -> {
+    public void edit(Product oldVersion, Product newVersion, EditListener listener) {
+        delete(oldVersion, null);
+        add(newVersion, () -> {
             fetchUpdatedDataFromFirebase(listener::onComplete);
         });
     }
@@ -88,11 +88,11 @@ public class ProductModel {
         modelFirebase.uploadImage(imageBmp, name, listener);
     }
 
-    public interface DeleteProductListener {
+    public interface DeleteListener {
         void onComplete();
     }
-    public void deleteProduct(Product product, DeleteProductListener listener) {
-        modelRoom.deleteProduct(product, null);
-        modelFirebase.deleteProduct(product, listener);
+    public void delete(Product product, DeleteListener listener) {
+        modelRoom.delete(product, null);
+        modelFirebase.delete(product, listener);
     }
 }
