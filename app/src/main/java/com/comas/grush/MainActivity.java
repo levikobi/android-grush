@@ -3,7 +3,6 @@ package com.comas.grush;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_authentication)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -61,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         boolean res = super.onPrepareOptionsMenu(menu);
         NavigationView navigationView = findViewById(R.id.nav_view);
         Menu temp = navigationView.getMenu();
-        MenuItem slideshow = temp.findItem(R.id.nav_slideshow);
+        MenuItem slideshow = temp.findItem(R.id.nav_authentication);
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             TextView nameTextView = findViewById(R.id.nav_header_user_name);
             nameTextView.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());

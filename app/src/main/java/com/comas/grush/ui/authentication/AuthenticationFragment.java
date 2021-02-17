@@ -1,9 +1,6 @@
-package com.comas.grush.ui.slideshow;
+package com.comas.grush.ui.authentication;
 
-import android.app.ActionBar;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,24 +13,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.comas.grush.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class SlideshowFragment extends Fragment {
+public class AuthenticationFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private AuthenticationViewModel authenticationViewModel;
 
     private static int state;
     private static final int REGISTER = 0;
@@ -50,8 +41,8 @@ public class SlideshowFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel = new ViewModelProvider(this).get(SlideshowViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
+        authenticationViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_authentication, container, false);
 
         initializeViewElements(root);
         initializeViewHandlers();
@@ -140,7 +131,7 @@ public class SlideshowFragment extends Fragment {
     private void updateUI() {
         NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
         Menu temp = navigationView.getMenu();
-        MenuItem slideshow = temp.findItem(R.id.nav_slideshow);
+        MenuItem slideshow = temp.findItem(R.id.nav_authentication);
         slideshow.setTitle("Log Out");
         View headerView = navigationView.getHeaderView(0);
         TextView userEmail = headerView.findViewById(R.id.nav_header_user_email);

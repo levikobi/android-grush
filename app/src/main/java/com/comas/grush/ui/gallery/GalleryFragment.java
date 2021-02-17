@@ -80,7 +80,7 @@ public class GalleryFragment extends Fragment {
         ad.setMessage("You need to be logged in to get in there!");
         ad.setButton("Login", (dialog, which) -> {
             dialog.dismiss();
-            Navigation.findNavController(view).navigate(GalleryFragmentDirections.actionGalleryToSlideshow());
+            Navigation.findNavController(view).navigate(GalleryFragmentDirections.actionGalleryToAuthentication());
         });
         ad.setOnCancelListener(dialog -> {
             dialog.dismiss();
