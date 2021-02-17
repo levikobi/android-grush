@@ -5,9 +5,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.comas.grush.model.Model;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -45,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-        TextView name = findViewById(R.id.nav_header_user_name);
-        TextView text = findViewById(R.id.nav_header_user_email);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            text.setText(user.getEmail());
+        TextView DisplayNameTextView = findViewById(R.id.nav_header_user_name);
+        TextView emailTextView = findViewById(R.id.nav_header_user_email);
+        if (Model.users.isLoggedIn()) {
+            DisplayNameTextView.setText(Model.users.getDisplayName());
+            emailTextView.setText(Model.users.getEmail());
         }
 
         return true;
@@ -59,25 +58,25 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         boolean res = super.onPrepareOptionsMenu(menu);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        Menu temp = navigationView.getMenu();
-        MenuItem slideshow = temp.findItem(R.id.nav_authentication);
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            TextView nameTextView = findViewById(R.id.nav_header_user_name);
-            nameTextView.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-            slideshow.setTitle("Logout");
-            slideshow.setOnMenuItemClickListener(item -> {
-                FirebaseAuth.getInstance().signOut();
-                slideshow.setTitle("Login");
+        Menu mainMenu = navigationView.getMenu();
+        MenuItem authenticationMenuItem = mainMenu.findItem(R.id.nav_authentication);
+        if (Model.users.isLoggedIn()) {
+            TextView displayNameTextView = findViewById(R.id.nav_header_user_name);
+            TextView emailTextView = findViewById(R.id.nav_header_user_email);
+            displayNameTextView.setText(Model.users.getDisplayName());
+            emailTextView.setText(Model.users.getEmail());
 
-                TextView emailTextView = findViewById(R.id.nav_header_user_email);
+            authenticationMenuItem.setTitle("Logout");
+            authenticationMenuItem.setOnMenuItemClickListener(item -> {
+                Model.users.signOut();
+                authenticationMenuItem.setTitle("Login");
+                displayNameTextView.setText("Anonymous");
                 emailTextView.setText("Not logged in");
-
-                nameTextView.setText("Anonymous");
 
                 return false;
             });
         } else {
-            slideshow.setTitle("Login");
+            authenticationMenuItem.setTitle("Login");
         }
         return res;
     }
