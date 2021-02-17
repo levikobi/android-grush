@@ -76,73 +76,64 @@ public class SlideshowFragment extends Fragment {
     }
 
     private void handleSubmit(View view) {
+        runLoadingAnimation(true);
         String email = mEmailEditText.getText().toString();
         String password = mPasswordEditText.getText().toString();
-        if (TextUtils.isEmpty(password)){
-            mPasswordEditText.setError("Password is Required.");    return;
-        }
-
-        if (TextUtils.isEmpty(email)){
-            mEmailEditText.setError("Email is Required.");  return;
-        }
-
-        if (TextUtils.isEmpty(email)){
-            mNameEditText.setError("Full Name is Required.");  return;
-        }
-
-        if (password.length() < 6){
-            mPasswordEditText.setError("Password must be at least 6 characters.");  return;
-        }
-
-        if (!email.contains("@")){
-            mEmailEditText.setError("Invalid email.");  return;
-        }
-
+        if (!validUserDetails(email, password)) return;
         switch (state) {
             case LOGIN:     login(view, email, password);       break;
             case REGISTER:  register(view, email, password);    break;
         }
     }
 
+    private boolean validUserDetails(String email, String password) {
+        boolean isValid = true;
+        if (state == REGISTER && mNameEditText.getText().toString().isEmpty()) {
+            mNameEditText.setError("Full Name is Required.");
+            isValid = false;
+        }
+        if (email.isEmpty() || !email.contains("@")) {
+            mEmailEditText.setError("Valid email is Required.");
+            isValid = false;
+        }
+        if (password.isEmpty() || password.length() < 6) {
+            mPasswordEditText.setError("At least 6 figures password is required.");
+            isValid = false;
+        }
+        return isValid;
+    }
+
     private void login(View view, String email, String password) {
-        mProgressBar.setVisibility(View.VISIBLE);
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
+                    runLoadingAnimation(false);
                     if (task.isSuccessful()) {
-                        Log.d("TAG", "signInWithEmailAndPassword:success");
-                        Toast.makeText(getContext(), "Logged in", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Successfully logged in", Toast.LENGTH_SHORT).show();
                         updateUI();
                         Navigation.findNavController(view).popBackStack();
                     } else {
-                        Log.w("TAG", "signInWithEmailAndPassword:failure", task.getException());
                         Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
-                    mProgressBar.setVisibility(View.INVISIBLE);
                 });
     }
 
     private void register(View view, String email, String password) {
-        mProgressBar.setVisibility(View.VISIBLE);
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d("TAG", "createUserWithEmail:success");
-
                         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                 .setDisplayName(mNameEditText.getText().toString())
                                 .build();
                         FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates).addOnCompleteListener(task1 -> {
                             updateUI();
+                            runLoadingAnimation(false);
+                            Toast.makeText(getContext(), "Successfully registered", Toast.LENGTH_SHORT).show();
                             Navigation.findNavController(view).popBackStack();
                         });
-
                     } else {
-                        Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                        Log.d("TAG", task.getException().toString());
+                        runLoadingAnimation(false);
                         Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
-                    mProgressBar.setVisibility(View.INVISIBLE);
-
                 });
     }
 
@@ -184,5 +175,14 @@ public class SlideshowFragment extends Fragment {
                 break;
             default: break;
         }
+    }
+
+    protected void runLoadingAnimation(boolean isLoading) {
+        mProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        mNameEditText.setEnabled(!isLoading);
+        mEmailEditText.setEnabled(!isLoading);
+        mPasswordEditText.setEnabled(!isLoading);
+        mSubmitButton.setEnabled(!isLoading);
+        mClickHereTextView.setEnabled(!isLoading);
     }
 }
