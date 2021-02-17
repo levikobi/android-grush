@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.slideshow.SlideshowFragment">
 
+
+    <ProgressBar
+        android:id="@+id/auth_frag_title_progressbar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/auth_frag_title_textview"
         android:layout_width="wrap_content"
@@ -89,6 +101,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Click here."
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/auth_frag_question_textview"
         app:layout_constraintTop_toBottomOf="@+id/auth_frag_submit_button" />
 
