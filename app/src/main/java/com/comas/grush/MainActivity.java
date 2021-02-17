@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -66,14 +63,17 @@ public class MainActivity extends AppCompatActivity {
         Menu temp = navigationView.getMenu();
         MenuItem slideshow = temp.findItem(R.id.nav_slideshow);
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            TextView nameTextView = findViewById(R.id.nav_header_user_name);
+            nameTextView.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
             slideshow.setTitle("Logout");
             slideshow.setOnMenuItemClickListener(item -> {
                 FirebaseAuth.getInstance().signOut();
                 slideshow.setTitle("Login");
 
-                TextView text = findViewById(R.id.nav_header_user_email);
-                text.setText("Not logged in");
+                TextView emailTextView = findViewById(R.id.nav_header_user_email);
+                emailTextView.setText("Not logged in");
 
+                nameTextView.setText("Anonymous");
 
                 return false;
             });

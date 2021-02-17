@@ -122,14 +122,17 @@ public class SlideshowFragment extends Fragment {
 
     private void register(View view, String email, String password) {
         mProgressBar.setVisibility(View.VISIBLE);
+        String name = mNameEditText.getText().toString();
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("TAG", "createUserWithEmail:success");
                         updateUI();
+                        // TODO - send Firebase username
                         Navigation.findNavController(view).popBackStack();
                     } else {
                         Log.w("TAG", "createUserWithEmail:failure", task.getException());
+                        Log.d("TAG", task.getException().toString());
                         Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
                     mProgressBar.setVisibility(View.INVISIBLE);
