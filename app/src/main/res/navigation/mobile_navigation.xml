@@ -55,8 +55,8 @@
     <fragment
         android:id="@+id/productDetailsFragment"
         android:name="com.comas.grush.ui.product.ProductDetailsFragment"
-        android:label="fragment_product_details"
-        tools:layout="@layout/fragment_product_details" >
+        android:label="Product Details"
+        tools:layout="@layout/fragment_product_details">
         <argument
             android:name="product_id"
             app:argType="string" />
@@ -70,13 +70,13 @@
     <fragment
         android:id="@+id/productCreateFragment"
         android:name="com.comas.grush.ui.product.ProductCreateFragment"
-        android:label="fragment_product_create"
+        android:label="Create a Product"
         tools:layout="@layout/fragment_product_create" />
     <fragment
         android:id="@+id/productEditFragment"
         android:name="com.comas.grush.ui.product.ProductEditFragment"
-        android:label="fragment_product_edit"
-        tools:layout="@layout/fragment_product_edit" >
+        android:label="Edit Product"
+        tools:layout="@layout/fragment_product_edit">
         <argument
             android:name="product_id"
             app:argType="string" />
