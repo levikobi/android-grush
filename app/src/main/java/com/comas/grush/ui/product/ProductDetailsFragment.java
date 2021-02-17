@@ -32,24 +32,9 @@ public class ProductDetailsFragment extends ProductFragment {
             runLoadingAnimation(false);
             mProduct = product;
             setContainerData();
-
-            mEditButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Navigation.findNavController(v)
-                            .navigate(ProductDetailsFragmentDirections.actionProductDetailsToProductEdit(productId));
-                }
-            });
+            initializeViewHandlers();
         });
 
-        mDeleteButton.setOnClickListener(v -> {
-            runLoadingAnimation(true);
-            Model.instance.deleteProduct(mProduct, () -> {
-                runLoadingAnimation(false);
-                Toast.makeText(getContext(), "Successfully deleted the product", Toast.LENGTH_SHORT).show();
-                Navigation.findNavController(view).popBackStack();
-            });
-        });
         return view;
     }
 
@@ -73,5 +58,24 @@ public class ProductDetailsFragment extends ProductFragment {
         if (mProduct.getImage() != null) {
             Picasso.get().load(mProduct.getImage()).into(mProductImageView);
         }
+    }
+
+    private void initializeViewHandlers() {
+        mEditButton.setOnClickListener(this::handleEdit);
+        mDeleteButton.setOnClickListener(this::handleDelete);
+    }
+
+    private void handleEdit(View view) {
+        Navigation.findNavController(view)
+                .navigate(ProductDetailsFragmentDirections.actionProductDetailsToProductEdit(mProduct.getId()));
+    }
+
+    private void handleDelete(View view) {
+        runLoadingAnimation(true);
+        Model.instance.deleteProduct(mProduct, () -> {
+            runLoadingAnimation(false);
+            Toast.makeText(getContext(), "Successfully deleted the product", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(view).popBackStack();
+        });
     }
 }

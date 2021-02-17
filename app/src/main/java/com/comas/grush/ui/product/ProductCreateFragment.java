@@ -16,8 +16,12 @@ public class ProductCreateFragment extends ProductFragment {
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         runLoadingAnimation(false);
+        setContainerVisibility();
+        return view;
+    }
+
+    private void setContainerVisibility() {
         mEditButton.setVisibility(View.GONE);
         mDeleteButton.setVisibility(View.GONE);
-        return view;
     }
 }
