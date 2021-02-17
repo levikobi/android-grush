@@ -1,14 +1,10 @@
 package com.comas.grush.ui.product;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,9 +13,8 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.comas.grush.MyApplication;
 import com.comas.grush.R;
-import com.comas.grush.model.Product;
+import com.comas.grush.model.product.Product;
 import com.comas.grush.ui.gallery.GalleryFragmentDirections;
 import com.comas.grush.ui.gallery.GalleryViewModel;
 import com.comas.grush.ui.home.HomeFragmentDirections;

@@ -1,4 +1,4 @@
- package com.comas.grush.model;
+ package com.comas.grush.model.product;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -7,7 +7,6 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -49,7 +48,7 @@ public class ModelFirebase {
                 .addOnFailureListener(e -> listener.onComplete(products));
     }
 
-    public void getProductById(String id, Model.GetProductByIdListener listener) {
+    public void getProductById(String id, ProductModel.GetProductByIdListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(COLLECTION_PATH).document(id).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -60,7 +59,7 @@ public class ModelFirebase {
                 });
     }
 
-    public void addProduct(Product product, Model.AddProductListener listener) {
+    public void addProduct(Product product, ProductModel.AddProductListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference newProductRef = db.collection(COLLECTION_PATH).document();
         product.setId(newProductRef.getId());
@@ -77,7 +76,7 @@ public class ModelFirebase {
                 });
     }
 
-    public void uploadImage(Bitmap imageBmp, String name, Model.UploadImageListener listener) {
+    public void uploadImage(Bitmap imageBmp, String name, ProductModel.UploadImageListener listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         final StorageReference imagesRef = storage.getReference().child("images").child(name);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -103,7 +102,7 @@ public class ModelFirebase {
         });
     }
 
-    public void deleteProduct(Product product, Model.DeleteProductListener listener) {
+    public void deleteProduct(Product product, ProductModel.DeleteProductListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(COLLECTION_PATH).document(product.getId()).update("isRemoved", true)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

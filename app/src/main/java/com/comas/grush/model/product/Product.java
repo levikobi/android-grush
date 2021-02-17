@@ -1,4 +1,4 @@
-package com.comas.grush.model;
+package com.comas.grush.model.product;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

@@ -3,7 +3,7 @@ package com.comas.grush.ui.product;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.comas.grush.model.Product;
+import com.comas.grush.model.product.Product;
 
 import java.util.List;
 

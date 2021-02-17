@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.navigation.Navigation;
 
 import com.comas.grush.model.Model;
-import com.comas.grush.model.Product;
+import com.comas.grush.model.product.Product;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ public class ProductDetailsFragment extends ProductFragment {
 
         setContainerVisibility(editable);
 
-        Model.instance.getProductById(productId, product -> {
+        Model.products.getProductById(productId, product -> {
             runLoadingAnimation(false);
             mProduct = product;
             setContainerData();
@@ -72,7 +72,7 @@ public class ProductDetailsFragment extends ProductFragment {
 
     private void handleDelete(View view) {
         runLoadingAnimation(true);
-        Model.instance.deleteProduct(mProduct, () -> {
+        Model.products.deleteProduct(mProduct, () -> {
             runLoadingAnimation(false);
             Toast.makeText(getContext(), "Successfully deleted the product", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(view).popBackStack();

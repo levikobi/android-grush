@@ -1,7 +1,6 @@
-package com.comas.grush.model;
+package com.comas.grush.model.product;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;

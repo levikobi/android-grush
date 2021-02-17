@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -13,9 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.comas.grush.R;
 import com.comas.grush.model.Model;
-import com.comas.grush.model.Product;
+import com.comas.grush.model.product.Product;
 import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
@@ -31,7 +29,7 @@ public class ProductEditFragment extends ProductFragment {
 
         setContainerVisibility();
 
-        Model.instance.getProductById(productId, product -> {
+        Model.products.getProductById(productId, product -> {
             runLoadingAnimation(false);
             mProduct = product;
             setContainerData();
@@ -67,7 +65,7 @@ public class ProductEditFragment extends ProductFragment {
 
         BitmapDrawable bitmapDrawable = (BitmapDrawable) mProductImageView.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
-        Model.instance.uploadImage(bitmap, UUID.randomUUID().toString(), url -> {
+        Model.products.uploadImage(bitmap, UUID.randomUUID().toString(), url -> {
 
             if (url == null) {
                 runLoadingAnimation(false);
@@ -78,7 +76,7 @@ public class ProductEditFragment extends ProductFragment {
                 builder.show();
             } else {
                 newProduct.setImage(url);
-                Model.instance.editProduct(mProduct, newProduct, () -> {
+                Model.products.editProduct(mProduct, newProduct, () -> {
                     runLoadingAnimation(false);
                     Toast.makeText(getContext(), "Successfully edited your product", Toast.LENGTH_SHORT).show();
                     Navigation.findNavController(view).navigate(ProductEditFragmentDirections.actionProductEditToGallery());

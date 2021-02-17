@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import com.comas.grush.R;
 import com.comas.grush.model.Model;
-import com.comas.grush.model.Product;
+import com.comas.grush.model.product.Product;
 
 import java.util.UUID;
 
@@ -153,7 +153,7 @@ public class ProductFragment extends Fragment {
 
         BitmapDrawable bitmapDrawable = (BitmapDrawable) mProductImageView.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
-        Model.instance.uploadImage(bitmap, UUID.randomUUID().toString(), url -> {
+        Model.products.uploadImage(bitmap, UUID.randomUUID().toString(), url -> {
             runLoadingAnimation(false);
             if (url == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -163,7 +163,7 @@ public class ProductFragment extends Fragment {
                 builder.show();
             } else {
                 product.setImage(url);
-                Model.instance.addProduct(product, () -> {
+                Model.products.addProduct(product, () -> {
                     Toast.makeText(getContext(), "Successfully added a new product", Toast.LENGTH_SHORT).show();
                     Navigation.findNavController(view).popBackStack();
                 });

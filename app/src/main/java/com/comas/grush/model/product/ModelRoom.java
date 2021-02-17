@@ -1,10 +1,11 @@
-package com.comas.grush.model;
+package com.comas.grush.model.product;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+
+import com.comas.grush.model.AppLocalDB;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class ModelRoom {
         return AppLocalDB.db.productDao().getAllByOwnerId(ownerId);
     }
 
-    public void getProductById(String id, Model.GetProductByIdListener listener) {
+    public void getProductById(String id, ProductModel.GetProductByIdListener listener) {
         class MyAsyncTask extends AsyncTask {
             private Product product;
             @Override
