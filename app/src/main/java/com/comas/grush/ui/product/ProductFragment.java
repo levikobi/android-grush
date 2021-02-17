@@ -146,7 +146,9 @@ public class ProductFragment extends Fragment {
         product.setDesc(mProductDescEditText.getText().toString());
 
         if (!pictureSelected) {
-
+            Toast.makeText(getContext(), "Can't upload a product without an image.", Toast.LENGTH_LONG).show();
+            runLoadingAnimation(false);
+            return;
         }
 
         BitmapDrawable bitmapDrawable = (BitmapDrawable) mProductImageView.getDrawable();
