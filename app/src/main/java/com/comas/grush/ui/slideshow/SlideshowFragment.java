@@ -29,6 +29,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SlideshowFragment extends Fragment {
 
@@ -122,14 +123,19 @@ public class SlideshowFragment extends Fragment {
 
     private void register(View view, String email, String password) {
         mProgressBar.setVisibility(View.VISIBLE);
-        String name = mNameEditText.getText().toString();
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("TAG", "createUserWithEmail:success");
-                        updateUI();
-                        // TODO - send Firebase username
-                        Navigation.findNavController(view).popBackStack();
+
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(mNameEditText.getText().toString())
+                                .build();
+                        FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates).addOnCompleteListener(task1 -> {
+                            updateUI();
+                            Navigation.findNavController(view).popBackStack();
+                        });
+
                     } else {
                         Log.w("TAG", "createUserWithEmail:failure", task.getException());
                         Log.d("TAG", task.getException().toString());
