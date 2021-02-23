@@ -69,7 +69,10 @@ public class AuthenticationFragment extends Fragment {
         runLoadingAnimation(true);
         String email = mEmailEditText.getText().toString();
         String password = mPasswordEditText.getText().toString();
-        if (!validUserDetails(email, password)) return;
+        if (!validUserDetails(email, password)) {
+            runLoadingAnimation(false);
+            return;
+        }
         switch (state) {
             case LOGIN:     login(view, email, password);       break;
             case REGISTER:  register(view, email, password);    break;
