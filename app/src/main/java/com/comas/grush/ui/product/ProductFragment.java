@@ -15,6 +15,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
@@ -31,6 +32,8 @@ import android.widget.Toast;
 import com.comas.grush.R;
 import com.comas.grush.model.Model;
 import com.comas.grush.model.product.Product;
+import com.comas.grush.ui.home.HomeViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
 
@@ -52,14 +55,18 @@ public class ProductFragment extends Fragment {
     protected Button mDeleteButton;
     protected ProgressBar mProgressBar;
 
-    private boolean pictureSelected;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.product_fragment, container, false);
+        mViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
         initializeViewElements(view);
         initializeViewHandlers();
+
+        if (mViewModel.getBitmap() != null) {
+            mProductImageView.setImageBitmap(mViewModel.getBitmap());
+        }
+
         return view;
     }
 
@@ -80,21 +87,14 @@ public class ProductFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) return;
         switch (requestCode) {
             case REQUEST_IMAGE_CAPTURE:
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                mProductImageView.setImageBitmap(rotateBitmap(imageBitmap, 90));
-                pictureSelected = true;
+                mViewModel.setBitmap(rotateBitmap(imageBitmap, 90));
+                mProductImageView.setImageBitmap(mViewModel.getBitmap());
                 break;
             case REQUEST_EXTERNAL_CONTENT:
                 // TODO: fix uploading from gallery
@@ -109,7 +109,6 @@ public class ProductFragment extends Fragment {
                     String picturePath = cursor.getString(columnIndex);
                     mProductImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                     cursor.close();
-                    pictureSelected = true;
                 }
                 break;
         }
@@ -141,15 +140,15 @@ public class ProductFragment extends Fragment {
         product.setName(mProductNameEditText.getText().toString());
         product.setDesc(mProductDescEditText.getText().toString());
 
-        if (!pictureSelected) {
+        if (!mViewModel.selectedPicture()) {
             Toast.makeText(getContext(), "Can't upload a product without an image.", Toast.LENGTH_LONG).show();
             runLoadingAnimation(false);
             return;
         }
 
         BitmapDrawable bitmapDrawable = (BitmapDrawable) mProductImageView.getDrawable();
-        Bitmap bitmap = bitmapDrawable.getBitmap();
-        Model.products.uploadImage(bitmap, UUID.randomUUID().toString(), url -> {
+        mViewModel.setBitmap(bitmapDrawable.getBitmap());
+        Model.products.uploadImage(mViewModel.getBitmap(), UUID.randomUUID().toString(), url -> {
             runLoadingAnimation(false);
             if (url == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
