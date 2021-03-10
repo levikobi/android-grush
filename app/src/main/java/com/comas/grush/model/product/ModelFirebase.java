@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -33,7 +34,6 @@ public class ModelFirebase {
         List<Product> products = new LinkedList<>();
         db.collection(COLLECTION_PATH)
                 .whereGreaterThanOrEqualTo("lastUpdated", timestamp)
-                .whereEqualTo("isRemoved", false)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     Log.d("TAG", "***Getting products from Firebase***");
@@ -105,11 +105,12 @@ public class ModelFirebase {
     public void delete(Product product, ProductModel.DeleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(COLLECTION_PATH).document(product.getId()).update("isRemoved", true)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        if (listener != null) listener.onComplete();
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    db.collection(COLLECTION_PATH).document(product.getId()).update("lastUpdated", FieldValue.serverTimestamp())
+                            .addOnSuccessListener(a -> {
+                                if (listener != null) listener.onComplete();
+                            });
                 });
+
     }
 }

@@ -10,7 +10,7 @@ import com.comas.grush.model.product.ProductDao;
 
 public class AppLocalDB {
 
-    @Database(entities = {Product.class}, version = 19)
+    @Database(entities = {Product.class}, version = 20)
     public abstract static class AppLocalDBRepository extends RoomDatabase {
         public abstract ProductDao productDao();
     }

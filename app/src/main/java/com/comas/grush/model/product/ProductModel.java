@@ -51,6 +51,9 @@ public class ProductModel {
                 if (product.getLastUpdated() > lastU) {
                     lastU = product.getLastUpdated();
                 }
+                if (product.getRemoved()) {
+                    modelRoom.delete(product, null);
+                }
             }
             sharedPreferences.edit().putLong("lastUpdated", lastU).apply();
             if (listener != null) listener.onComplete();
